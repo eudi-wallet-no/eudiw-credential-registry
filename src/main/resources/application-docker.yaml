@@ -13,7 +13,6 @@ management:
     port: 9294
 
 
-  credential-register:
-    credential-issuer-servers:
-      - http://issuer-server:9240/
-    
+credential-register:
+  credential-issuer-servers:
+    - http://issuer-server:9240/

@@ -38,7 +38,7 @@ public class IndexController {
 
     }
 
-    @GetMapping(value = "/metadata", produces = "application/json")
+    @GetMapping(value = "/metadata", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<CredentialConfigurationsSupported> get() throws JsonProcessingException {
         metadataDataGathering.loopThroughAllIssuersAndStartFlow();

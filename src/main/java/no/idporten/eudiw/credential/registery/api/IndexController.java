@@ -1,12 +1,21 @@
 package no.idporten.eudiw.credential.registery.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import no.idporten.eudiw.credential.registery.integration.*;
+import no.idporten.eudiw.credential.registery.integration.model.CredentialConfigurationsSupported;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+
 @Controller
 public class IndexController {
+
+    @Autowired
+    private MetadataDataGathering metadataDataGathering;
 
     @GetMapping(value = "/", produces = MediaType.TEXT_HTML_VALUE)
     @ResponseBody
@@ -26,6 +35,14 @@ public class IndexController {
                 </body>
                 </html>
                 """;
+
+    }
+
+    @GetMapping(value = "/metadata", produces = "application/json")
+    @ResponseBody
+    public ArrayList<CredentialConfigurationsSupported> get() throws JsonProcessingException {
+        metadataDataGathering.loopThroughAllIssuersAndStartFlow();
+        return metadataDataGathering.getHashMap().get("https://utsteder.test.eidas2sandkasse.net");
 
     }
 }

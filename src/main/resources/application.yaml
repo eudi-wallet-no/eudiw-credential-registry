@@ -27,3 +27,6 @@ management:
     tags:
       application: ${spring.application.name}
       environment: ${spring.application.environment}
+
+credential-register-properties:
+  uri: https://utsteder.test.eidas2sandkasse.net

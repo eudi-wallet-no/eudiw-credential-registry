@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class IndexController {
@@ -40,7 +40,7 @@ public class IndexController {
 
     @GetMapping(value = "/metadata", produces = "application/json")
     @ResponseBody
-    public ArrayList<CredentialConfigurationsSupported> get() throws JsonProcessingException {
+    public List<CredentialConfigurationsSupported> get() throws JsonProcessingException {
         metadataDataGathering.loopThroughAllIssuersAndStartFlow();
         return metadataDataGathering.getHashMap().get("https://utsteder.test.eidas2sandkasse.net");
     }

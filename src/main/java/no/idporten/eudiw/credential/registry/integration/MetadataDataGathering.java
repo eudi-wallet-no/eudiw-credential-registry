@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Ansvarlig for å sende get-forespørsel til well known open id credential issuer til alle issuere som er registrert
@@ -28,7 +29,7 @@ public class MetadataDataGathering {
     private ConfigProperties configProperties;
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
-    private HashMap<String, ArrayList<CredentialConfigurationsSupported>> mapOfEntries;
+    private HashMap<String, List<CredentialConfigurationsSupported>> mapOfEntries;
 
     public MetadataDataGathering() {
         this.restTemplate = new RestTemplate();

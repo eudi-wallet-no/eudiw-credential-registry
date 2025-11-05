@@ -18,19 +18,18 @@ import java.util.Map;
  */
 
 @Service
-public class MetadataDataGathering {
+public class CredentialIssuerMetadataRetriever {
     @Autowired
     private ConfigProperties configProperties;
     private CredentialRegisterConfiguration configuration;
     private Map<String, CredentialIssuer> mapOfIssuers;
 
-    public MetadataDataGathering() {
+    public CredentialIssuerMetadataRetriever() {
         configuration = new CredentialRegisterConfiguration();
         this.mapOfIssuers = new HashMap<>();
     }
 
     public CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
-        uri = URI.create(uri + "/.well-known/openid-credential-issuer");
         CredentialIssuer credentialIssuer = configuration.restClient().get()
                 .uri(uri)
                 .retrieve()

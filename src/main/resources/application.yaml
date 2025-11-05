@@ -29,5 +29,5 @@ management:
       environment: ${spring.application.environment}
 
 credential-register-properties:
-  uri: https://utsteder.test.eidas2sandkasse.net
+  uri: https://utsteder.test.eidas2sandkasse.net/.well-known/openid-credential-issuer
 

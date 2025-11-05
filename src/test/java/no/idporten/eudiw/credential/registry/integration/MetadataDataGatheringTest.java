@@ -22,13 +22,13 @@ import static org.mockito.Mockito.when;
 
 @DisplayName("When collecting metadata")
 @SpringBootTest
-@TestPropertySource(properties = {"credential-register-properties.uri=https://utsteder.test.eidas2sandkasse.net,https://utsteder.eidas2sandkasse.dev"})
+@TestPropertySource(properties = {"credential-register-properties.uri=https://utsteder.test.eidas2sandkasse.net/.well-known/openid-credential-issuer,https://utsteder.eidas2sandkasse.dev/.well-known/openid-credential-issuer"})
 @ActiveProfiles
 public class MetadataDataGatheringTest {
 
 
     @MockitoSpyBean
-    private MetadataDataGathering metadataDataGathering;
+    private CredentialIssuerMetadataRetriever metadataDataGathering;
 
 
     private final ObjectMapper objectMapper;

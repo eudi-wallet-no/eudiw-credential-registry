@@ -33,11 +33,4 @@ public class IndexController {
                 """;
 
     }
-
-//    @GetMapping(value = "/metadata", produces = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseBody
-//    public List<CredentialConfigurationsSupported> get() throws JsonProcessingException {
-//        metadataDataGathering.loopThroughAllIssuersAndStartFlow();
-//        return metadataDataGathering.getHashMap().get("https://utsteder.test.eidas2sandkasse.net");
-//    }
 }

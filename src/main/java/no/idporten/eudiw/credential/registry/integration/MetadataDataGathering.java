@@ -1,25 +1,19 @@
 package no.idporten.eudiw.credential.registry.integration;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import no.idporten.eudiw.credential.registry.configuration.ConfigProperties;
-import no.idporten.eudiw.credential.registry.integration.model.CredentialConfiguration;
+import no.idporten.eudiw.credential.registry.configuration.CredentialRegisterConfiguration;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 /**
- * Ansvarlig for å sende get-forespørsel til well known open id credential issuer til alle issuere som er registrert
- * i application.yaml. Lagrer data i en HashMap, der nøkkel er issuer og verdien er en ArrayList med de forskjellige
- * credential sonfigurations supported-feltene, som har hvert sitt objekt i arraylisten.
+ * Responsible for sending get-request to well knwon openid credential issuer endpoints of all issuers registered
+ * in application.yaml, and formating the data into an object.
  *
  */
 
@@ -27,85 +21,32 @@ import java.util.List;
 public class MetadataDataGathering {
     @Autowired
     private ConfigProperties configProperties;
-    private RestTemplate restTemplate;
-    private ObjectMapper objectMapper;
-    private HashMap<String, List<CredentialConfiguration>> mapOfEntries;
+    private CredentialRegisterConfiguration configuration;
+    private Map<String, CredentialIssuer> mapOfIssuers;
 
     public MetadataDataGathering() {
-        this.restTemplate = new RestTemplate();
-        this.objectMapper = new ObjectMapper();
-        this.mapOfEntries = new HashMap<>();
+        configuration = new CredentialRegisterConfiguration();
+        this.mapOfIssuers = new HashMap<>();
     }
 
-    /**
-     * Setter en Streng med all json-dataen som hentes basert på get-forespørsel sendt til url-en i konstruktøren.
-     * Vi legger på .well-known/openid-credential-issuer.
-     *
-     * @param url DINUTSTEDER.DOMENE
-     */
-    public CredentialIssuer getMethod(URI url) {
-        url = URI.create(url + "/.well-known/openid-credential-issuer");
-        return restTemplate.getForObject(url, CredentialIssuer.class);
+    public CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
+        uri = URI.create(uri + "/.well-known/openid-credential-issuer");
+        CredentialIssuer credentialIssuer = configuration.restClient().get()
+                .uri(uri)
+                .retrieve()
+                .body(CredentialIssuer.class);
+        return credentialIssuer;
     }
 
-    /**
-     * Setter metadata basert på strengen i konstruktøren. Dataen parses til json her.
-     *
-     * @param json Hele metadataen som en streng.
-     * @throws JsonProcessingException
-     */
-    public void setMetadata(String json) throws JsonProcessingException {
-        JsonNode metadataStructure = objectMapper.readTree(json);
-        CredentialIssuer credentialIssuer = objectMapper.readValue(json, CredentialIssuer.class);
-        setCredentialConfigurations(metadataStructure, credentialIssuer);
+    public Map<String, CredentialIssuer> getMapOfIssuers() {
+        return mapOfIssuers;
     }
 
-    /**
-     * Tar den fulle json strukturen inn. Henter ut biten med credential_configurations_supported. For hver credential
-     * configuration supported, så oppretter den et objekt basert på dataene i json strukturen. Dette objektet legges
-     * på lista over objekter tilhørende sin credential configuration supported. Til slutt settes lista med credential
-     * configurations supported sammen med credential issuer i et HasmHap, der issuer er nøkkelen.
-     *
-     * @param data En Json node med hele json strukturen i et well-known/openid endepunkt.
-     * @param credentialIssuer utstederen som vi leser av metadata fra.
-     */
-    public void setCredentialConfigurations(JsonNode data, CredentialIssuer credentialIssuer)  {
-        JsonNode node = data.get("credential_configurations_supported");
-        ArrayList<CredentialConfiguration> listOfCredentialConfigurationsSupported = new ArrayList<>();
-        if (node != null && node.isObject()) {
-            node.fields().forEachRemaining(entry -> {
-                CredentialConfiguration credentialConfigurationsObject = objectMapper.convertValue(entry.getValue(), CredentialConfiguration.class);
-                listOfCredentialConfigurationsSupported.add(credentialConfigurationsObject);
-            }
-            );
-            updateHashMap(credentialIssuer, listOfCredentialConfigurationsSupported);
-        }
-    }
 
-    public void updateHashMap(CredentialIssuer credentialIssuer, ArrayList<CredentialConfiguration> listOfCredentialConfigurationsSupported) {
-        mapOfEntries.put(credentialIssuer.credentialIssuer(), listOfCredentialConfigurationsSupported);
-    }
-
-    public void clearHashMap() {
-        mapOfEntries.clear();
-    }
-
-    public HashMap<String, List<CredentialConfiguration>> getHashMap() {
-        return  mapOfEntries;
-    }
-    /**
-     * Dersom det eksisterer flere utstedere i application.yaml fila, vil det leses metadata fra respektive endepunkt.
-     *
-     * @throws JsonProcessingException
-     */
-
-    public void loopThroughAllIssuersAndStartFlow() throws JsonProcessingException {
-        String uri = configProperties.uri().toString();
-        String[] listOfIssuers = uri.split("%20");
-        for (String issuer : listOfIssuers) {
-            CredentialIssuer content = getMethod(URI.create(issuer));
-            //setMetadata(content);
-            int i = 0;
+    public void loopThroughAllIssuersAndStartFlow()  {
+        for (URI uri : configProperties.uri()) {
+            CredentialIssuer content = fetchCredentialIssuerFromMetadataRequest(uri);
+            mapOfIssuers.put(content.credentialIssuer(), content);
         }
     }
 }

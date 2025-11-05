@@ -26,12 +26,4 @@ class IndexControllerTest {
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(content().string(containsString("Bevisregister frå Digdir")));
     }
-
-    @Test
-    @DisplayName("Verify that GET /metadata returns something")
-    void metadataReturnsSomething() throws Exception {
-        mockMvc.perform(get("/metadata"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"));
-    }
 }

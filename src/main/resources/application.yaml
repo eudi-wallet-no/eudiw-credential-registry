@@ -30,3 +30,4 @@ management:
 
 credential-register-properties:
   uri: https://utsteder.test.eidas2sandkasse.net
+

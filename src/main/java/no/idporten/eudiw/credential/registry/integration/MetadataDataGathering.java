@@ -1,11 +1,11 @@
-package no.idporten.eudiw.credential.registery.integration;
+package no.idporten.eudiw.credential.registry.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import no.idporten.eudiw.credential.registery.configuration.ConfigProperties;
-import no.idporten.eudiw.credential.registery.integration.model.CredentialConfigurationsSupported;
-import no.idporten.eudiw.credential.registery.integration.model.CredentialIssuer;
+import no.idporten.eudiw.credential.registry.configuration.ConfigProperties;
+import no.idporten.eudiw.credential.registry.integration.model.CredentialConfigurationsSupported;
+import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;

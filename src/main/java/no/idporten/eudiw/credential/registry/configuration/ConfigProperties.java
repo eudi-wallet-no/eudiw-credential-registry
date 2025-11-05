@@ -1,4 +1,4 @@
-package no.idporten.eudiw.credential.registery.configuration;
+package no.idporten.eudiw.credential.registry.configuration;
 
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;

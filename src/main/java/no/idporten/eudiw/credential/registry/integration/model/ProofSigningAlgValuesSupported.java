@@ -1,4 +1,4 @@
-package no.idporten.eudiw.credential.registery.integration.model;
+package no.idporten.eudiw.credential.registry.integration.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

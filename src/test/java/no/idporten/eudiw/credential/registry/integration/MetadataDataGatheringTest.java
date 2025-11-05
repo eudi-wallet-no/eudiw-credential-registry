@@ -1,7 +1,7 @@
-package no.idporten.eudiw.credential.registery.integration;
+package no.idporten.eudiw.credential.registry.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import no.idporten.eudiw.credential.registery.integration.model.CredentialConfigurationsSupported;
+import no.idporten.eudiw.credential.registry.integration.model.CredentialConfigurationsSupported;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -30,7 +30,7 @@ public class MetadataDataGathering {
     private ObjectMapper objectMapper;
     private HashMap<String, ArrayList<CredentialConfigurationsSupported>> mapOfEntries;
 
-    public MetadataDataGathering(){
+    public MetadataDataGathering() {
         this.restTemplate = new RestTemplate();
         this.objectMapper = new ObjectMapper();
         this.mapOfEntries = new HashMap<>();

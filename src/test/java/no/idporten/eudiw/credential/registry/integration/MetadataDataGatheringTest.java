@@ -5,9 +5,8 @@ import no.idporten.eudiw.credential.registry.integration.model.CredentialConfigu
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
@@ -21,9 +20,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("When collecting metadata")
 @SpringBootTest
 @TestPropertySource(properties = {"credential-register-properties.uri=https://utsteder.test.eidas2sandkasse.net https://utsteder.eidas2sandkasse.dev"})
+@ActiveProfiles
 public class MetadataDataGatheringTest {
 
-    private static final Logger log = LoggerFactory.getLogger(MetadataDataGatheringTest.class);
+
     @MockitoSpyBean
     private MetadataDataGathering metadataDataGathering;
 

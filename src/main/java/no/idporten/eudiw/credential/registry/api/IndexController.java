@@ -1,7 +1,6 @@
 package no.idporten.eudiw.credential.registry.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import no.idporten.eudiw.credential.registry.configuration.ConfigProperties;
 import no.idporten.eudiw.credential.registry.integration.*;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialConfigurationsSupported;
 

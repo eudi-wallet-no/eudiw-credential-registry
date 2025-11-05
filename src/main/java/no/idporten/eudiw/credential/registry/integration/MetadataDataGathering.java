@@ -92,7 +92,6 @@ public class MetadataDataGathering {
     public HashMap<String, ArrayList<CredentialConfigurationsSupported>> getHashMap() {
         return  mapOfEntries;
     }
-
     /**
      * Dersom det eksisterer flere utstedere i application.yaml fila, vil det leses metadata fra respektive endepunkt.
      *
@@ -105,7 +104,6 @@ public class MetadataDataGathering {
         for (String issuer : listOfIssuers) {
             String content = getMethod(URI.create(issuer));
             setMetadata(content);
-
         }
     }
 }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.idporten.eudiw.credential.registry.configuration.ConfigProperties;
-import no.idporten.eudiw.credential.registry.integration.model.CredentialConfigurationsSupported;
+import no.idporten.eudiw.credential.registry.integration.model.CredentialConfiguration;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class MetadataDataGathering {
     private ConfigProperties configProperties;
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
-    private HashMap<String, List<CredentialConfigurationsSupported>> mapOfEntries;
+    private HashMap<String, List<CredentialConfiguration>> mapOfEntries;
 
     public MetadataDataGathering() {
         this.restTemplate = new RestTemplate();
@@ -43,9 +43,9 @@ public class MetadataDataGathering {
      *
      * @param url DINUTSTEDER.DOMENE
      */
-    public String getMethod(URI url) {
+    public CredentialIssuer getMethod(URI url) {
         url = URI.create(url + "/.well-known/openid-credential-issuer");
-        return restTemplate.getForObject(url, String.class);
+        return restTemplate.getForObject(url, CredentialIssuer.class);
     }
 
     /**
@@ -71,10 +71,10 @@ public class MetadataDataGathering {
      */
     public void setCredentialConfigurations(JsonNode data, CredentialIssuer credentialIssuer)  {
         JsonNode node = data.get("credential_configurations_supported");
-        ArrayList<CredentialConfigurationsSupported> listOfCredentialConfigurationsSupported = new ArrayList<>();
+        ArrayList<CredentialConfiguration> listOfCredentialConfigurationsSupported = new ArrayList<>();
         if (node != null && node.isObject()) {
             node.fields().forEachRemaining(entry -> {
-                CredentialConfigurationsSupported credentialConfigurationsObject = objectMapper.convertValue(entry.getValue(), CredentialConfigurationsSupported.class);
+                CredentialConfiguration credentialConfigurationsObject = objectMapper.convertValue(entry.getValue(), CredentialConfiguration.class);
                 listOfCredentialConfigurationsSupported.add(credentialConfigurationsObject);
             }
             );
@@ -82,7 +82,7 @@ public class MetadataDataGathering {
         }
     }
 
-    public void updateHashMap(CredentialIssuer credentialIssuer, ArrayList<CredentialConfigurationsSupported> listOfCredentialConfigurationsSupported) {
+    public void updateHashMap(CredentialIssuer credentialIssuer, ArrayList<CredentialConfiguration> listOfCredentialConfigurationsSupported) {
         mapOfEntries.put(credentialIssuer.credentialIssuer(), listOfCredentialConfigurationsSupported);
     }
 
@@ -90,7 +90,7 @@ public class MetadataDataGathering {
         mapOfEntries.clear();
     }
 
-    public HashMap<String, ArrayList<CredentialConfigurationsSupported>> getHashMap() {
+    public HashMap<String, List<CredentialConfiguration>> getHashMap() {
         return  mapOfEntries;
     }
     /**
@@ -103,8 +103,9 @@ public class MetadataDataGathering {
         String uri = configProperties.uri().toString();
         String[] listOfIssuers = uri.split("%20");
         for (String issuer : listOfIssuers) {
-            String content = getMethod(URI.create(issuer));
-            setMetadata(content);
+            CredentialIssuer content = getMethod(URI.create(issuer));
+            //setMetadata(content);
+            int i = 0;
         }
     }
 }

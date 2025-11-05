@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record CredentialConfigurationsSupported(
+public record CredentialConfiguration(
         @JsonProperty("doctype")
         String doctype,
         @JsonProperty("vct")
@@ -15,10 +15,6 @@ public record CredentialConfigurationsSupported(
         String scope,
         @JsonProperty("format")
         String format,
-        @JsonProperty("display")
-        List<Display> display,
-        @JsonProperty("claims")
-        List<Claims> claims,
         @JsonProperty("credential_metadata")
         CredentialMetadata credentialMetadata,
         @JsonProperty("proof_types_supported")

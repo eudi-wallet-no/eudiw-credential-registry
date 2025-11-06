@@ -37,7 +37,7 @@ public class CredentialIssuerMetadataRetriever {
         return credentialIssuer;
     }
 
-    public Map<String, CredentialIssuer> getMapOfIssuers() {
+    protected Map<String, CredentialIssuer> getMapOfIssuers() {
         return mapOfIssuers;
     }
 

@@ -22,9 +22,9 @@ import static org.mockito.Mockito.when;
 
 @DisplayName("When collecting metadata")
 @SpringBootTest
-@TestPropertySource(properties = {"credential-register-properties.uri=https://utsteder.test.eidas2sandkasse.net/.well-known/openid-credential-issuer,https://utsteder.eidas2sandkasse.dev/.well-known/openid-credential-issuer"})
+@TestPropertySource(properties = {"credential-registry.credential-issuer-servers=https://utsteder.test.eidas2sandkasse.net/.well-known/openid-credential-issuer,https://utsteder.eidas2sandkasse.dev/.well-known/openid-credential-issuer"})
 @ActiveProfiles
-public class MetadataDataGatheringTest {
+public class CredentialIssuerMetadataRetrieverTest {
 
 
     @MockitoSpyBean
@@ -34,7 +34,7 @@ public class MetadataDataGatheringTest {
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public MetadataDataGatheringTest(ObjectMapper objectMapper) {
+    public CredentialIssuerMetadataRetrieverTest(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 

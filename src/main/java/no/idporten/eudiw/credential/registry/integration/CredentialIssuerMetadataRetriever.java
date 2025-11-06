@@ -19,13 +19,13 @@ import java.util.Map;
 
 @Service
 public class CredentialIssuerMetadataRetriever {
-    @Autowired
-    private ConfigProperties configProperties;
-    private CredentialRegisterConfiguration configuration;
+    private final ConfigProperties configProperties;
+    private final CredentialRegisterConfiguration configuration;
     private Map<String, CredentialIssuer> mapOfIssuers;
-
-    public CredentialIssuerMetadataRetriever() {
-        configuration = new CredentialRegisterConfiguration();
+    @Autowired
+    public CredentialIssuerMetadataRetriever(final ConfigProperties configProperties, final CredentialRegisterConfiguration configuration) {
+        this.configProperties = configProperties;
+        this.configuration = configuration;
         this.mapOfIssuers = new HashMap<>();
     }
 

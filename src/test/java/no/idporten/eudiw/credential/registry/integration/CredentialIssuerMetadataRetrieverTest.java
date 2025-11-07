@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("When collecting metadata")
 @SpringBootTest
-@TestPropertySource(properties = {"credential-registry.credential-issuer-servers=https://utsteder.test.eidas2sandkasse.net/.well-known/openid-credential-issuer,https://utsteder.eidas2sandkasse.dev/.well-known/openid-credential-issuer"})
 @ActiveProfiles
 public class CredentialIssuerMetadataRetrieverTest {
 

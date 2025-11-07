@@ -1,5 +1,6 @@
 package no.idporten.eudiw.credential.registry.configuration;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -10,13 +11,18 @@ import org.springframework.web.client.RestClient;
 @Configuration
 public class CredentialRegisterConfiguration {
 
+    private final ConfigProperties configProperties;
 
-    public CredentialRegisterConfiguration() {
+
+    public CredentialRegisterConfiguration(ConfigProperties configProperties) {
+        this.configProperties = configProperties;
     }
 
     @Bean
     public RestClient restClient() {
         SimpleClientHttpRequestFactory clientHttpRequestFactory = new SimpleClientHttpRequestFactory();
+        clientHttpRequestFactory.setConnectTimeout(configProperties.connectTimeout());
+        clientHttpRequestFactory.setReadTimeout(configProperties.readTimeout());
         return RestClient.builder()
                 .requestFactory(clientHttpRequestFactory)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)

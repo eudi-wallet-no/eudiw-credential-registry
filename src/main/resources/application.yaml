@@ -29,6 +29,7 @@ management:
       environment: ${spring.application.environment}
 
 credential-registry:
-  credential-issuer-servers: https://utsteder.test.eidas2sandkasse.net/.well-known/openid-credential-issuer
+  credential-issuer-servers:
+    -https://utsteder.test.eidas2sandkasse.net/.well-known/openid-credential-issuer
 
 

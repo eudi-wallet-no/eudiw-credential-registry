@@ -43,8 +43,8 @@ public class CredentialIssuerMetadataRetriever {
 
 
     public void loopThroughAllIssuersAndStartFlow()  {
-        for (URI uri : configProperties.credentialIssuerServers()) {
-            CredentialIssuer content = fetchCredentialIssuerFromMetadataRequest(uri);
+        for (String uri : configProperties.credentialIssuerServers()) {
+            CredentialIssuer content = fetchCredentialIssuerFromMetadataRequest(URI.create(uri));
             mapOfIssuers.put(content.credentialIssuer(), content);
         }
     }

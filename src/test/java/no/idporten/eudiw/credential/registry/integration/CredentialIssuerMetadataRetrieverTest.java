@@ -34,7 +34,7 @@ public class CredentialIssuerMetadataRetrieverTest {
 
     }
 
-    @DisplayName("When setting metadata")
+    @DisplayName("That the metadata can be read into the issuer object")
     @Test
     public void testSetMetadata() throws JsonProcessingException {
 

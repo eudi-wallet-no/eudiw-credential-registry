@@ -17,7 +17,7 @@ public class OutputCredentialsIssuer {
 
     }
 
-    public String getCredentialIssuerString() {
+    public String getCredential_issuer() {
         return credential_issuer;
     }
     public String getCredential_configuration_id() {

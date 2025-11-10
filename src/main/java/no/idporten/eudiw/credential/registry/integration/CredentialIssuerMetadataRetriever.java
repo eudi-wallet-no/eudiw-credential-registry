@@ -1,8 +1,10 @@
 package no.idporten.eudiw.credential.registry.integration;
 
+import jakarta.validation.Valid;
 import no.idporten.eudiw.credential.registry.configuration.ConfigProperties;
 import no.idporten.eudiw.credential.registry.configuration.CredentialRegisterConfiguration;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
+import no.idporten.eudiw.credential.registry.output.model.OutputCredentialsIssuer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,7 @@ public class CredentialIssuerMetadataRetriever {
         this.mapOfIssuers = new HashMap<>();
     }
 
+    @Valid
     public CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
         CredentialIssuer credentialIssuer = configuration.restClient().get()
                 .uri(uri)
@@ -48,4 +51,5 @@ public class CredentialIssuerMetadataRetriever {
             mapOfIssuers.put(content.credentialIssuer(), content);
         }
     }
+
 }

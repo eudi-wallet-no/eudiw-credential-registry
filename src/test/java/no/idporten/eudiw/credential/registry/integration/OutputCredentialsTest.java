@@ -43,7 +43,7 @@ public class OutputCredentialsTest {
         OutputCredentials issuer = credentialIssuer.getCredentialIssuerForNewFormat();
 
         assertAll(
-                () -> assertEquals("personal_administrative_number", issuer.getOutputCredentialIssuers().get(0).getCredential_metadata().getClaims().get(0).getPath().get(0).toString())
+                () -> assertEquals("personal_administrative_number", issuer.getCredentials().get(0).getCredential_metadata().getClaims().get(0).getPath().get(0).toString())
         );
 
     }

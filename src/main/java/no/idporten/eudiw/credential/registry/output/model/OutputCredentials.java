@@ -33,7 +33,7 @@ public class OutputCredentials {
         return credentials;
     }
 
-    public List<OutputCredentialsIssuer> getOutputCredentialIssuers(){
+    public List<OutputCredentialsIssuer> getCredentials(){
         return credentialsIssuer;
     }
 }

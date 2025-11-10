@@ -2,36 +2,36 @@ package no.idporten.eudiw.credential.registry.output.model;
 
 public class OutputCredentialsIssuer {
 
-    private String credentialIssuer;
-    private String credentialConfigurationId;
-    private String credentialType;
+    private String credential_issuer;
+    private String credential_configuration_id;
+    private String credential_type;
     private String format;
-    private OutputCredentialMetadata credentialMetadata;
+    private OutputCredentialMetadata credential_metadata;
 
     public OutputCredentialsIssuer(String credentialIssuer, String credentialConfigurationId, String credentialType, String format, OutputCredentialMetadata credentialMetadata) {
-        this.credentialIssuer = credentialIssuer;
-        this.credentialConfigurationId = credentialConfigurationId;
-        this.credentialType = credentialType;
+        this.credential_issuer = credentialIssuer;
+        this.credential_configuration_id = credentialConfigurationId;
+        this.credential_type = credentialType;
         this.format = format;
-        this.credentialMetadata = credentialMetadata;
+        this.credential_metadata = credentialMetadata;
 
     }
 
     public String getCredentialIssuerString() {
-        return credentialIssuer;
+        return credential_issuer;
     }
-    public String getCredentialConfigurationId() {
-        return credentialConfigurationId;
+    public String getCredential_configuration_id() {
+        return credential_configuration_id;
     }
-    public String getCredentialType() {
-        return credentialType;
+    public String getCredential_type() {
+        return credential_type;
     }
     public String getFormat() {
         return format;
     }
 
-    public OutputCredentialMetadata getCredentialMetadata() {
-        return credentialMetadata;
+    public OutputCredentialMetadata getCredential_metadata() {
+        return credential_metadata;
     }
 
 

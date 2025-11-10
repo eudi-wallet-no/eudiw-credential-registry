@@ -17,7 +17,7 @@ public class OutputCredentials {
     }
 
     private List<OutputCredentialsIssuer> setOutputCredentialIssuer(String issuer, Map<String, CredentialConfiguration> configurations) {
-        List<OutputCredentialsIssuer> outputCredentialIssuers = new ArrayList<>();
+        List<OutputCredentialsIssuer> credentials = new ArrayList<>();
         for(String key : configurations.keySet())
         {
             String type;
@@ -28,9 +28,9 @@ public class OutputCredentials {
                 type = configurations.get(key).vct();
             }
             OutputCredentialsIssuer outputIssuer = new OutputCredentialsIssuer(issuer, key, type, configurations.get(key).format(), new OutputCredentialMetadata(configurations.get(key).credentialMetadata().display(), configurations.get(key).credentialMetadata().claims()));
-            outputCredentialIssuers.add(outputIssuer);
+            credentials.add(outputIssuer);
         }
-        return outputCredentialIssuers;
+        return credentials;
     }
 
     public List<OutputCredentialsIssuer> getOutputCredentialIssuers(){

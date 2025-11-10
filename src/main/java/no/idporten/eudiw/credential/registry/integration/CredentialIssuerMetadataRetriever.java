@@ -1,10 +1,10 @@
 package no.idporten.eudiw.credential.registry.integration;
 
-import jakarta.validation.Valid;
+import jakarta.validation.*;
 import no.idporten.eudiw.credential.registry.configuration.ConfigProperties;
 import no.idporten.eudiw.credential.registry.configuration.CredentialRegisterConfiguration;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
-import no.idporten.eudiw.credential.registry.output.model.OutputCredentialsIssuer;
+import no.idporten.eudiw.credential.registry.output.model.OutputCredentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Responsible for sending get-request to well knwon openid credential issuer endpoints of all issuers registered
@@ -24,20 +25,28 @@ public class CredentialIssuerMetadataRetriever {
     private final ConfigProperties configProperties;
     private final CredentialRegisterConfiguration configuration;
     private Map<String, CredentialIssuer> mapOfIssuers;
+    private Validator validator;
     @Autowired
     public CredentialIssuerMetadataRetriever(final ConfigProperties configProperties, final CredentialRegisterConfiguration configuration) {
         this.configProperties = configProperties;
         this.configuration = configuration;
         this.mapOfIssuers = new HashMap<>();
+        validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
-    @Valid
     public CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
         CredentialIssuer credentialIssuer = configuration.restClient().get()
                 .uri(uri)
                 .retrieve()
                 .body(CredentialIssuer.class);
-        return credentialIssuer;
+        Set<ConstraintViolation<CredentialIssuer>> violations = validator.validate(credentialIssuer);
+        if (violations.isEmpty()) {
+            return credentialIssuer;
+        }
+        else  {
+            throw new ConstraintViolationException(violations);
+        }
+
     }
 
     protected Map<String, CredentialIssuer> getMapOfIssuers() {
@@ -50,6 +59,13 @@ public class CredentialIssuerMetadataRetriever {
             CredentialIssuer content = fetchCredentialIssuerFromMetadataRequest(URI.create(uri));
             mapOfIssuers.put(content.credentialIssuer(), content);
         }
+    }
+
+    public OutputCredentials fetchOutputCredentialIssuerFromMetadataRequest() {
+        String uri = configProperties.credentialIssuerServers().getFirst();
+        URI outputUri = URI.create(uri);
+        CredentialIssuer issuer = fetchCredentialIssuerFromMetadataRequest(outputUri);
+        return issuer.getCredentialIssuerForNewFormat();
     }
 
 }

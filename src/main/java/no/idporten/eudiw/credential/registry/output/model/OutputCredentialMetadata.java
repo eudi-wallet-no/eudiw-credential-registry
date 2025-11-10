@@ -12,38 +12,44 @@ public class OutputCredentialMetadata {
     private List<OutputClaims>  outputClaimsList;
 
     public OutputCredentialMetadata(List<Display> inputDisplay, List<Claims>  inputClaims) {
-        outputDisplayList = new ArrayList<>();
-        outputClaimsList = new ArrayList<>();
-        setOutputDisplay(inputDisplay);
-        setOutputClaims(inputClaims);
+        outputDisplayList = setOutputDisplay(inputDisplay);
+        outputClaimsList = setOutputClaims(inputClaims);
+
     }
 
-    protected void setOutputDisplay(List<Display> inputDisplayList) {
+    protected List<OutputDisplay> setOutputDisplay(List<Display> inputDisplayList) {
+        List<OutputDisplay> outputDisplayList = new ArrayList<>();
         for(Display display : inputDisplayList) {
             OutputDisplay outputDisplay = new OutputDisplay(display.name(), display.locale());
             outputDisplayList.add(outputDisplay);
         }
+        return outputDisplayList;
     }
 
     public List<OutputDisplay> getOutputDisplayList() {
         return outputDisplayList;
     }
 
-    protected void setOutputClaims(List<Claims> inputClaimsList) {
+    protected List<OutputClaims> setOutputClaims(List<Claims> inputClaimsList) {
+        List<OutputClaims> outputClaimsList = new ArrayList<>();
         for(Claims claim : inputClaimsList) {
-            List<String> pathList = new ArrayList<>();
-            for(String path : claim.path()) {
-                pathList.add(path);
-            }
+
+            List<String> pathListInternal = new ArrayList<>();
             List<OutputDisplay> displayListInternal = new ArrayList<>();
+
+            for(String path : claim.path()) {
+                pathListInternal.add(path);
+            }
+
             for(Display display : claim.display())
             {
                 OutputDisplay outputDisplay = new OutputDisplay(display.name(), display.locale());
-                outputDisplayList.add(outputDisplay);
+                displayListInternal.add(outputDisplay);
             }
-            OutputClaims outputClaims = new OutputClaims(pathList, displayListInternal);
+            OutputClaims outputClaims = new OutputClaims(pathListInternal, displayListInternal);
             outputClaimsList.add(outputClaims);
         }
+        return outputClaimsList;
     }
 
     public List<OutputClaims> getOutputClaimsList() {

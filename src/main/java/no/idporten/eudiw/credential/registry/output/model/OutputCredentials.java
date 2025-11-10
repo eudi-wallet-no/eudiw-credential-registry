@@ -1,33 +1,36 @@
 package no.idporten.eudiw.credential.registry.output.model;
 
 
-import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
+import no.idporten.eudiw.credential.registry.integration.model.CredentialConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class OutputCredentials {
 
     private List<OutputCredentialsIssuer> credentialsIssuer;
 
-    public OutputCredentials(CredentialIssuer credentialIssuer){
-        credentialsIssuer = new ArrayList<>();
-        setOutputCredentialIssuer(credentialIssuer);
+
+    public OutputCredentials(String issuer, Map<String, CredentialConfiguration> configurations) {
+        credentialsIssuer = setOutputCredentialIssuer(issuer, configurations);
     }
 
-    private void setOutputCredentialIssuer(CredentialIssuer credentialIssuer){
-        for(String key : credentialIssuer.credentialConfiguration().keySet())
+    private List<OutputCredentialsIssuer> setOutputCredentialIssuer(String issuer, Map<String, CredentialConfiguration> configurations) {
+        List<OutputCredentialsIssuer> outputCredentialIssuers = new ArrayList<>();
+        for(String key : configurations.keySet())
         {
             String type;
-            if (credentialIssuer.credentialConfiguration().containsKey(key) && credentialIssuer.credentialConfiguration().get(key).doctype()!=null
+            if (configurations.containsKey(key) && configurations.get(key).doctype()!=null
             ) {
-                type =  credentialIssuer.credentialConfiguration().get(key).doctype();
+                type =  configurations.get(key).doctype();
             }else {
-                type = credentialIssuer.credentialConfiguration().get(key).vct();
+                type = configurations.get(key).vct();
             }
-            OutputCredentialsIssuer outputIssuer = new OutputCredentialsIssuer(credentialIssuer.credentialIssuer(), key, type, credentialIssuer.credentialConfiguration().get(key).format(), new OutputCredentialMetadata(credentialIssuer.credentialConfiguration().get(key).credentialMetadata().display(), credentialIssuer.credentialConfiguration().get(key).credentialMetadata().claims()));
-            credentialsIssuer.add(outputIssuer);
+            OutputCredentialsIssuer outputIssuer = new OutputCredentialsIssuer(issuer, key, type, configurations.get(key).format(), new OutputCredentialMetadata(configurations.get(key).credentialMetadata().display(), configurations.get(key).credentialMetadata().claims()));
+            outputCredentialIssuers.add(outputIssuer);
         }
+        return outputCredentialIssuers;
     }
 
     public List<OutputCredentialsIssuer> getOutputCredentialIssuers(){

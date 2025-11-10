@@ -1,8 +1,5 @@
 package no.idporten.eudiw.credential.registry.output.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class OutputCredentialsIssuer {
 
     private String credentialIssuer;

@@ -8,12 +8,12 @@ import java.util.List;
 
 public class OutputCredentialMetadata {
 
-    private List<OutputDisplay> outputDisplayList;
-    private List<OutputClaims>  outputClaimsList;
+    private List<OutputDisplay> display;
+    private List<OutputClaims> claims;
 
     public OutputCredentialMetadata(List<Display> inputDisplay, List<Claims>  inputClaims) {
-        outputDisplayList = setOutputDisplay(inputDisplay);
-        outputClaimsList = setOutputClaims(inputClaims);
+        display = setOutputDisplay(inputDisplay);
+        claims = setOutputClaims(inputClaims);
 
     }
 
@@ -26,8 +26,8 @@ public class OutputCredentialMetadata {
         return outputDisplayList;
     }
 
-    public List<OutputDisplay> getOutputDisplayList() {
-        return outputDisplayList;
+    public List<OutputDisplay> getDisplay() {
+        return display;
     }
 
     protected List<OutputClaims> setOutputClaims(List<Claims> inputClaimsList) {
@@ -52,8 +52,8 @@ public class OutputCredentialMetadata {
         return outputClaimsList;
     }
 
-    public List<OutputClaims> getOutputClaimsList() {
-        return outputClaimsList;
+    public List<OutputClaims> getClaims() {
+        return claims;
     }
 
 }

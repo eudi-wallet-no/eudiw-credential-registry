@@ -4,7 +4,6 @@ import jakarta.validation.*;
 import no.idporten.eudiw.credential.registry.configuration.ConfigProperties;
 import no.idporten.eudiw.credential.registry.configuration.CredentialRegisterConfiguration;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
-import no.idporten.eudiw.credential.registry.response.model.Credentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +21,14 @@ import java.util.*;
 public class CredentialIssuerMetadataRetriever {
     private final ConfigProperties configProperties;
     private final CredentialRegisterConfiguration configuration;
-    private Map<String, CredentialIssuer> mapOfIssuers;
     private Validator validator;
     private List<CredentialIssuer> listOfIssuer;
     @Autowired
     public CredentialIssuerMetadataRetriever(final ConfigProperties configProperties, final CredentialRegisterConfiguration configuration) {
         this.configProperties = configProperties;
         this.configuration = configuration;
-        this.mapOfIssuers = new HashMap<>();
-        this.listOfIssuer = new ArrayList<>();
-        validator = Validation.buildDefaultValidatorFactory().getValidator();
+        this.validator = Validation.buildDefaultValidatorFactory().getValidator();
+        this.listOfIssuer = setListOfIssuer();
     }
 
     public CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
@@ -49,22 +46,18 @@ public class CredentialIssuerMetadataRetriever {
 
     }
 
-    protected Map<String, CredentialIssuer> getMapOfIssuers() {
-        return mapOfIssuers;
-    }
 
-    public void loopThroughAllIssuersAndStartFlow()  {
+    public List<CredentialIssuer> setListOfIssuer() {
+        List<CredentialIssuer> issuerList = new ArrayList<>();
         for (String uri : configProperties.credentialIssuerServers()) {
             CredentialIssuer content = fetchCredentialIssuerFromMetadataRequest(URI.create(uri));
-            mapOfIssuers.put(content.credentialIssuer(), content);
-            listOfIssuer.add(content);
+            issuerList.add(content);
         }
+        return  issuerList;
     }
 
-    public Credentials getOutputCredentials(){
-        loopThroughAllIssuersAndStartFlow();
-        Credentials outputCredentials = new Credentials(listOfIssuer);
-        return outputCredentials;
+    public List<CredentialIssuer> getListOfIssuer() {
+        return listOfIssuer;
     }
 
 }

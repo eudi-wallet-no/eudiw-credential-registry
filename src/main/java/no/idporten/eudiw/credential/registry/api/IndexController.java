@@ -1,8 +1,5 @@
 package no.idporten.eudiw.credential.registry.api;
 
-import no.idporten.eudiw.credential.registry.integration.CredentialIssuerMetadataRetriever;
-import no.idporten.eudiw.credential.registry.response.model.OutputCredentials;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,9 +8,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class IndexController {
-
-    @Autowired
-    CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever;
 
     @GetMapping(value = "/", produces = MediaType.TEXT_HTML_VALUE)
     @ResponseBody
@@ -34,11 +28,5 @@ public class IndexController {
                 </html>
                 """;
 
-    }
-
-    @GetMapping(value= "/credentials", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public OutputCredentials credentials() {
-        return credentialIssuerMetadataRetriever.getOutputCredentials();
     }
 }

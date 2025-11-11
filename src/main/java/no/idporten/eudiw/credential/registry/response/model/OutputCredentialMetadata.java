@@ -1,11 +1,13 @@
 package no.idporten.eudiw.credential.registry.response.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import no.idporten.eudiw.credential.registry.integration.model.Claims;
 import no.idporten.eudiw.credential.registry.integration.model.Display;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OutputCredentialMetadata {
 
     private List<OutputDisplay> display;

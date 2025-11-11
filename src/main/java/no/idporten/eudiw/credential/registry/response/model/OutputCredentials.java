@@ -1,10 +1,12 @@
 package no.idporten.eudiw.credential.registry.response.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OutputCredentials {
 
     private List<OutputCredentialsIssuer> credentials;

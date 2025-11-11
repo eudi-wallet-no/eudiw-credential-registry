@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class OutputClaims {
+public class Claims {
 
     private List<String> path;
-    private List<OutputDisplay> display;
+    private List<Display> display;
 
 
-    public OutputClaims(List<String> path, List<OutputDisplay> display) {
+    public Claims(List<String> path, List<Display> display) {
         this.path = path;
         this.display = display;
     }
@@ -20,7 +20,7 @@ public class OutputClaims {
         return path;
     }
 
-    public List<OutputDisplay> getDisplay() {
+    public List<Display> getDisplay() {
         return display;
     }
 }

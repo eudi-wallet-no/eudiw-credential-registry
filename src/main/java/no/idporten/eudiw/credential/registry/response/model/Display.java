@@ -3,11 +3,11 @@ package no.idporten.eudiw.credential.registry.response.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class OutputDisplay {
+public class Display {
     private String name;
     private String locale;
 
-    public OutputDisplay(String name, String locale) {
+    public Display(String name, String locale) {
         setName(name);
         setLocale(locale);
     }

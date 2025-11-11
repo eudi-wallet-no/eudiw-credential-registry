@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import no.idporten.eudiw.credential.registry.integration.CredentialIssuerMetadataRetriever;
-import no.idporten.eudiw.credential.registry.response.model.OutputCredentials;
+import no.idporten.eudiw.credential.registry.response.model.Credentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
@@ -17,7 +17,7 @@ public class CredentialsController {
 
     @GetMapping(value= "/v1/credentials", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public OutputCredentials credentials() {
+    public Credentials credentials() {
         return credentialIssuerMetadataRetriever.getOutputCredentials();
     }
 

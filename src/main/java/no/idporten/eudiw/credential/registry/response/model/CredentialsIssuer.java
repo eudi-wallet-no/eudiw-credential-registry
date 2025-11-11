@@ -3,15 +3,15 @@ package no.idporten.eudiw.credential.registry.response.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class OutputCredentialsIssuer {
+public class CredentialsIssuer {
 
     private String credential_issuer;
     private String credential_configuration_id;
     private String credential_type;
     private String format;
-    private OutputCredentialMetadata credential_metadata;
+    private CredentialMetadata credential_metadata;
 
-    public OutputCredentialsIssuer(String credentialIssuer, String credentialConfigurationId, String credentialType, String format, OutputCredentialMetadata credentialMetadata) {
+    public CredentialsIssuer(String credentialIssuer, String credentialConfigurationId, String credentialType, String format, CredentialMetadata credentialMetadata) {
         this.credential_issuer = credentialIssuer;
         this.credential_configuration_id = credentialConfigurationId;
         this.credential_type = credentialType;
@@ -33,7 +33,7 @@ public class OutputCredentialsIssuer {
         return format;
     }
 
-    public OutputCredentialMetadata getCredential_metadata() {
+    public CredentialMetadata getCredential_metadata() {
         return credential_metadata;
     }
 }

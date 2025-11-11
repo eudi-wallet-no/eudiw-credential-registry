@@ -3,7 +3,7 @@ package no.idporten.eudiw.credential.registry.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
-import no.idporten.eudiw.credential.registry.response.model.OutputCredentials;
+import no.idporten.eudiw.credential.registry.response.model.Credentials;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ public class OutputCredentialsTest {
         CredentialIssuer credentialIssuer = objectMapper.readValue(METADATA, CredentialIssuer.class);
         List<CredentialIssuer> listOfIssuer = new ArrayList<>();
         listOfIssuer.add(credentialIssuer);
-        OutputCredentials outputCredentials = new OutputCredentials(listOfIssuer);
+        Credentials outputCredentials = new Credentials(listOfIssuer);
 
         assertAll(
                 () -> assertEquals("personal_administrative_number", outputCredentials.getCredentials().get(0).getCredential_metadata().getClaims().get(0).getPath().get(0).toString())

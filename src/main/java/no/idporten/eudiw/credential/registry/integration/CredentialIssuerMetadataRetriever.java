@@ -4,7 +4,7 @@ import jakarta.validation.*;
 import no.idporten.eudiw.credential.registry.configuration.ConfigProperties;
 import no.idporten.eudiw.credential.registry.configuration.CredentialRegisterConfiguration;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
-import no.idporten.eudiw.credential.registry.response.model.OutputCredentials;
+import no.idporten.eudiw.credential.registry.response.model.Credentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,9 +61,9 @@ public class CredentialIssuerMetadataRetriever {
         }
     }
 
-    public OutputCredentials getOutputCredentials(){
+    public Credentials getOutputCredentials(){
         loopThroughAllIssuersAndStartFlow();
-        OutputCredentials outputCredentials = new OutputCredentials(listOfIssuer);
+        Credentials outputCredentials = new Credentials(listOfIssuer);
         return outputCredentials;
     }
 

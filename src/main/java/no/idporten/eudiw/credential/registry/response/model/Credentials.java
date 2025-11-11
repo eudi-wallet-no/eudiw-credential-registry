@@ -7,20 +7,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class OutputCredentials {
+public class Credentials {
 
-    private List<OutputCredentialsIssuer> credentials;
+    private List<CredentialsIssuer> credentials;
     private List<CredentialIssuer> listOfIssuer;
 
 
-    public OutputCredentials(List<CredentialIssuer> listOfIssuer) {
+    public Credentials(List<CredentialIssuer> listOfIssuer) {
         this.listOfIssuer = listOfIssuer;
         credentials = new ArrayList<>();
         credentials = formatOutputCredentials();
     }
 
-    private List<OutputCredentialsIssuer> formatOutputCredentials() {
-        List<OutputCredentialsIssuer> outputCredentials = new ArrayList<>();
+    private List<CredentialsIssuer> formatOutputCredentials() {
+        List<CredentialsIssuer> outputCredentials = new ArrayList<>();
 
         for (CredentialIssuer issuer : listOfIssuer) {
             for(String key : issuer.credentialConfiguration().keySet()) {
@@ -32,14 +32,14 @@ public class OutputCredentials {
                 }else {
                     type = issuer.credentialConfiguration().get(key).vct();
                 }
-                OutputCredentialsIssuer outputIssuer = new OutputCredentialsIssuer(issuer.credentialIssuer(), key, type, issuer.credentialConfiguration().get(key).format(), new OutputCredentialMetadata(issuer.credentialConfiguration().get(key).credentialMetadata().display(), issuer.credentialConfiguration().get(key).credentialMetadata().claims()));
+                CredentialsIssuer outputIssuer = new CredentialsIssuer(issuer.credentialIssuer(), key, type, issuer.credentialConfiguration().get(key).format(), new CredentialMetadata(issuer.credentialConfiguration().get(key).credentialMetadata().display(), issuer.credentialConfiguration().get(key).credentialMetadata().claims()));
                 outputCredentials.add(outputIssuer);
             }
         }
         return outputCredentials;
     }
 
-    public List<OutputCredentialsIssuer> getCredentials(){
+    public List<CredentialsIssuer> getCredentials(){
         return credentials;
     }
 

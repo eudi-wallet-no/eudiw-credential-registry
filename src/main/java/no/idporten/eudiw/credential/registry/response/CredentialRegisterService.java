@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CredentialRegisterService {
 
-    private CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever;
+    private final CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever;
     private Credentials credentials;
 
     @Autowired

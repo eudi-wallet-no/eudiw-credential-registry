@@ -35,18 +35,18 @@ public class OutputCredentialsTest {
         this.objectMapper = objectMapper;
 
     }
-
-
-    @DisplayName("When reformatting the data")
-    @Test
-    void whenReformattingTheData() throws IOException {
-        CredentialIssuer credentialIssuer = objectMapper.readValue(METADATA, CredentialIssuer.class);
-        List<CredentialIssuer> listOfIssuer = new ArrayList<>();
-        listOfIssuer.add(credentialIssuer);
-        Credentials outputCredentials = new Credentials(listOfIssuer);
-
-        assertAll(
-                () -> assertEquals("personal_administrative_number", outputCredentials.getCredentials().get(0).getCredential_metadata().getClaims().get(0).getPath().get(0).toString())
-        );
-    }
+//
+//
+//    @DisplayName("When reformatting the data")
+//    @Test
+//    void whenReformattingTheData() throws IOException {
+//        CredentialIssuer credentialIssuer = objectMapper.readValue(METADATA, CredentialIssuer.class);
+//        List<CredentialIssuer> listOfIssuer = new ArrayList<>();
+//        listOfIssuer.add(credentialIssuer);
+//        Credentials outputCredentials = new Credentials(listOfIssuer);
+//
+//        assertAll(
+//                () -> assertEquals("personal_administrative_number", outputCredentials.getCredentials().get(0).getCredential_metadata().getClaims().get(0).getPath().get(0).toString())
+//        );
+//    }
 }

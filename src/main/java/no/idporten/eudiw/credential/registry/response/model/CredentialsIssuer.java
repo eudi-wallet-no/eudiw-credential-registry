@@ -1,6 +1,8 @@
 package no.idporten.eudiw.credential.registry.response.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CredentialsIssuer {
@@ -20,20 +22,24 @@ public class CredentialsIssuer {
 
     }
 
-    public String getCredential_issuer() {
-        return credential_issuer;
-    }
-    public String getCredential_configuration_id() {
-        return credential_configuration_id;
-    }
-    public String getCredential_type() {
-        return credential_type;
-    }
-    public String getFormat() {
-        return format;
+    public String getCredentialIssuer() {
+        return this.credential_issuer;
     }
 
-    public CredentialMetadata getCredential_metadata() {
-        return credential_metadata;
+    public String getCredetialConfigurationId() {
+       return this.credential_configuration_id;
     }
+
+    public String getCredentialType() {
+    return this.credential_type;
+    }
+
+    public String getFormat() {
+        return this.format;
+    }
+
+    public CredentialMetadata getCredentialMetadata() {
+        return this.credential_metadata;
+    }
+
 }

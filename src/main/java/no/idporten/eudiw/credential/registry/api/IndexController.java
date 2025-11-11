@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
 @Controller
 public class IndexController {
 
@@ -38,6 +39,6 @@ public class IndexController {
     @GetMapping(value= "/credentials", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public OutputCredentials credentials() {
-        return credentialIssuerMetadataRetriever.fetchOutputCredentialIssuerFromMetadataRequest();
+        return credentialIssuerMetadataRetriever.getOutputCredentials();
     }
 }

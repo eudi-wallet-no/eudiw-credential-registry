@@ -1,39 +1,44 @@
 package no.idporten.eudiw.credential.registry.output.model;
 
-
-import no.idporten.eudiw.credential.registry.integration.model.CredentialConfiguration;
+import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class OutputCredentials {
 
-    private List<OutputCredentialsIssuer> credentialsIssuer;
+    private List<OutputCredentialsIssuer> credentials;
+    private List<CredentialIssuer> listOfIssuer;
 
 
-    public OutputCredentials(String issuer, Map<String, CredentialConfiguration> configurations) {
-        credentialsIssuer = setOutputCredentialIssuer(issuer, configurations);
+    public OutputCredentials(List<CredentialIssuer> listOfIssuer) {
+        this.listOfIssuer = listOfIssuer;
+        credentials = new ArrayList<>();
+        credentials = formatOutputCredentials();
     }
 
-    private List<OutputCredentialsIssuer> setOutputCredentialIssuer(String issuer, Map<String, CredentialConfiguration> configurations) {
-        List<OutputCredentialsIssuer> credentials = new ArrayList<>();
-        for(String key : configurations.keySet())
-        {
-            String type;
-            if (configurations.containsKey(key) && configurations.get(key).doctype()!=null
-            ) {
-                type =  configurations.get(key).doctype();
-            }else {
-                type = configurations.get(key).vct();
+    private List<OutputCredentialsIssuer> formatOutputCredentials() {
+        List<OutputCredentialsIssuer> outputCredentials = new ArrayList<>();
+
+        for (CredentialIssuer issuer : listOfIssuer) {
+            for(String key : issuer.credentialConfiguration().keySet()) {
+
+                String type;
+                if (issuer.credentialConfiguration().containsKey(key) && issuer.credentialConfiguration().get(key).doctype()!=null
+                ) {
+                    type =  issuer.credentialConfiguration().get(key).doctype();
+                }else {
+                    type = issuer.credentialConfiguration().get(key).vct();
+                }
+                OutputCredentialsIssuer outputIssuer = new OutputCredentialsIssuer(issuer.credentialIssuer(), key, type, issuer.credentialConfiguration().get(key).format(), new OutputCredentialMetadata(issuer.credentialConfiguration().get(key).credentialMetadata().display(), issuer.credentialConfiguration().get(key).credentialMetadata().claims()));
+                outputCredentials.add(outputIssuer);
             }
-            OutputCredentialsIssuer outputIssuer = new OutputCredentialsIssuer(issuer, key, type, configurations.get(key).format(), new OutputCredentialMetadata(configurations.get(key).credentialMetadata().display(), configurations.get(key).credentialMetadata().claims()));
-            credentials.add(outputIssuer);
         }
-        return credentials;
+        return outputCredentials;
     }
 
     public List<OutputCredentialsIssuer> getCredentials(){
-        return credentialsIssuer;
+        return credentials;
     }
+
 }

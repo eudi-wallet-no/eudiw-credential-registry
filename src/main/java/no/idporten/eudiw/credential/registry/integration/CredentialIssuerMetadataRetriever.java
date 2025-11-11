@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Responsible for sending get-request to well knwon openid credential issuer endpoints of all issuers registered
@@ -26,11 +24,13 @@ public class CredentialIssuerMetadataRetriever {
     private final CredentialRegisterConfiguration configuration;
     private Map<String, CredentialIssuer> mapOfIssuers;
     private Validator validator;
+    private List<CredentialIssuer> listOfIssuer;
     @Autowired
     public CredentialIssuerMetadataRetriever(final ConfigProperties configProperties, final CredentialRegisterConfiguration configuration) {
         this.configProperties = configProperties;
         this.configuration = configuration;
         this.mapOfIssuers = new HashMap<>();
+        this.listOfIssuer = new ArrayList<>();
         validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
@@ -53,19 +53,18 @@ public class CredentialIssuerMetadataRetriever {
         return mapOfIssuers;
     }
 
-
     public void loopThroughAllIssuersAndStartFlow()  {
         for (String uri : configProperties.credentialIssuerServers()) {
             CredentialIssuer content = fetchCredentialIssuerFromMetadataRequest(URI.create(uri));
             mapOfIssuers.put(content.credentialIssuer(), content);
+            listOfIssuer.add(content);
         }
     }
 
-    public OutputCredentials fetchOutputCredentialIssuerFromMetadataRequest() {
-        String uri = configProperties.credentialIssuerServers().getFirst();
-        URI outputUri = URI.create(uri);
-        CredentialIssuer issuer = fetchCredentialIssuerFromMetadataRequest(outputUri);
-        return issuer.getCredentialIssuerForNewFormat();
+    public OutputCredentials getOutputCredentials(){
+        loopThroughAllIssuersAndStartFlow();
+        OutputCredentials outputCredentials = new OutputCredentials(listOfIssuer);
+        return outputCredentials;
     }
 
 }

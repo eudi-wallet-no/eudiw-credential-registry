@@ -1,5 +1,8 @@
 package no.idporten.eudiw.credential.registry.output.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OutputCredentialsIssuer {
 
     private String credential_issuer;
@@ -33,7 +36,4 @@ public class OutputCredentialsIssuer {
     public OutputCredentialMetadata getCredential_metadata() {
         return credential_metadata;
     }
-
-
-
 }

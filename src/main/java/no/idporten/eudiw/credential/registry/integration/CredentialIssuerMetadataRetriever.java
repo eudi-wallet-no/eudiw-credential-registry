@@ -4,7 +4,7 @@ import jakarta.validation.*;
 import no.idporten.eudiw.credential.registry.configuration.ConfigProperties;
 import no.idporten.eudiw.credential.registry.configuration.CredentialRegisterConfiguration;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
-import no.idporten.eudiw.credential.registry.output.model.OutputCredentials;
+import no.idporten.eudiw.credential.registry.response.model.OutputCredentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

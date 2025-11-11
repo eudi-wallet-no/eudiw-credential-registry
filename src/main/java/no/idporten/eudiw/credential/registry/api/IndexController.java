@@ -1,7 +1,7 @@
 package no.idporten.eudiw.credential.registry.api;
 
 import no.idporten.eudiw.credential.registry.integration.CredentialIssuerMetadataRetriever;
-import no.idporten.eudiw.credential.registry.output.model.OutputCredentials;
+import no.idporten.eudiw.credential.registry.response.model.OutputCredentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;

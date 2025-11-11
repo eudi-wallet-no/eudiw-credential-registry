@@ -1,4 +1,4 @@
-package no.idporten.eudiw.credential.registry.output.model;
+package no.idporten.eudiw.credential.registry.response.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

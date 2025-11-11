@@ -3,7 +3,7 @@ package no.idporten.eudiw.credential.registry.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
-import no.idporten.eudiw.credential.registry.output.model.OutputCredentials;
+import no.idporten.eudiw.credential.registry.response.model.OutputCredentials;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

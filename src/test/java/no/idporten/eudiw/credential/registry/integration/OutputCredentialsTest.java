@@ -3,8 +3,11 @@ package no.idporten.eudiw.credential.registry.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
+import no.idporten.eudiw.credential.registry.response.CredentialRegisterService;
 import no.idporten.eudiw.credential.registry.response.model.Credentials;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +25,8 @@ import java.util.List;
 public class OutputCredentialsTest {
 
     @MockitoSpyBean
-    private CredentialIssuerMetadataRetriever metadataDataGathering;
+    private CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever;
+    private CredentialRegisterService credentialRegisterService;
 
 
     private final ObjectMapper objectMapper;
@@ -31,22 +35,27 @@ public class OutputCredentialsTest {
             """;
 
     @Autowired
-    public OutputCredentialsTest(ObjectMapper objectMapper) {
+    public OutputCredentialsTest(ObjectMapper objectMapper, CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever) {
         this.objectMapper = objectMapper;
+        this.credentialIssuerMetadataRetriever = credentialIssuerMetadataRetriever;
 
     }
-//
-//
-//    @DisplayName("When reformatting the data")
-//    @Test
-//    void whenReformattingTheData() throws IOException {
-//        CredentialIssuer credentialIssuer = objectMapper.readValue(METADATA, CredentialIssuer.class);
-//        List<CredentialIssuer> listOfIssuer = new ArrayList<>();
-//        listOfIssuer.add(credentialIssuer);
-//        Credentials outputCredentials = new Credentials(listOfIssuer);
-//
-//        assertAll(
-//                () -> assertEquals("personal_administrative_number", outputCredentials.getCredentials().get(0).getCredential_metadata().getClaims().get(0).getPath().get(0).toString())
-//        );
-//    }
+
+
+    @DisplayName("When reformatting the data")
+    @Test
+    void whenReformattingTheData() throws IOException {
+        CredentialIssuer credentialIssuer = objectMapper.readValue(METADATA, CredentialIssuer.class);
+        List<CredentialIssuer> listOfIssuers = new ArrayList<>();
+        listOfIssuers.add(credentialIssuer);
+        credentialRegisterService = new CredentialRegisterService(credentialIssuerMetadataRetriever);
+        when(credentialIssuerMetadataRetriever.getListOfIssuer()).thenReturn(listOfIssuers);
+        Credentials credentials = credentialRegisterService.setResponse();
+
+
+
+        assertAll(
+                () -> assertEquals("personal_administrative_number", credentials.getCredentials().get(0).getCredentialMetadata().getClaims().get(0).getPath().get(0).toString())
+        );
+    }
 }

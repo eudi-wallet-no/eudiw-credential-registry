@@ -25,38 +25,35 @@ public class CredentialRegisterService {
 
     public Credentials setResponse() {
         List<CredentialsIssuer> outputCredentials = new ArrayList<>();
-        for(CredentialIssuer issuer : credentialIssuerMetadataRetriever.getListOfIssuer()) {
-            for (String credentialType : issuer.credentialConfiguration().keySet()) {
+        credentialIssuerMetadataRetriever.getListOfIssuer().stream().forEach((issuer) -> {
+            issuer.credentialConfiguration().keySet().stream().forEach((key) -> {
                 List<Claims> listOfClaims = new ArrayList<>();
                 List<Display> innerListOfDisplay = new ArrayList<>();
                 List<Display> outerListOfDisplay = new ArrayList<>();
-                for (no.idporten.eudiw.credential.registry.integration.model.Display display : issuer.credentialConfiguration().get(credentialType).credentialMetadata().display()) {
+                issuer.credentialConfiguration().get(key).credentialMetadata().display().stream().forEach((display) -> {
                     Display displayLocal = new Display(display.name(), display.locale());
                     outerListOfDisplay.add(displayLocal);
-                }
-                for (no.idporten.eudiw.credential.registry.integration.model.Claims claim : issuer.credentialConfiguration().get(credentialType).credentialMetadata().claims()) {
-
-                    for (no.idporten.eudiw.credential.registry.integration.model.Display display : claim.display()) {
+                });
+                issuer.credentialConfiguration().get(key).credentialMetadata().claims().stream().forEach((claim) -> {
+                    claim.display().stream().forEach((display) -> {
                         Display displayLocal = new Display(display.name(), display.locale());
                         innerListOfDisplay.add(displayLocal);
-                    }
-
+                    });
                     Claims claims = new Claims(claim.path(), innerListOfDisplay);
                     listOfClaims.add(claims);
-
-                }
+                });
                 String doctype;
-                if(issuer.credentialConfiguration().get(credentialType).vct()!= null)
+                if(issuer.credentialConfiguration().get(key).vct()!= null)
                 {
-                    doctype = issuer.credentialConfiguration().get(credentialType).vct();
+                    doctype = issuer.credentialConfiguration().get(key).vct();
                 } else {
-                    doctype = issuer.credentialConfiguration().get(credentialType).doctype();
+                    doctype = issuer.credentialConfiguration().get(key).doctype();
                 }
                 CredentialMetadata credentialMetadata = new CredentialMetadata(outerListOfDisplay, listOfClaims);
-                CredentialsIssuer treatedIssuer = new CredentialsIssuer(issuer.credentialIssuer(), credentialType, doctype, issuer.credentialConfiguration().get(credentialType).format(), credentialMetadata);
+                CredentialsIssuer treatedIssuer = new CredentialsIssuer(issuer.credentialIssuer(), key, doctype, issuer.credentialConfiguration().get(key).format(), credentialMetadata);
                 outputCredentials.add(treatedIssuer);
-            }
-        }
+            });
+        });
         return new Credentials(outputCredentials);
     }
 }

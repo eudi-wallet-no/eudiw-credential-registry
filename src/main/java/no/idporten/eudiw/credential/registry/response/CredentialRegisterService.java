@@ -25,15 +25,15 @@ public class CredentialRegisterService {
     public void setResponse(CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever) {
         List<CredentialsIssuer> outputCredentials = new ArrayList<>();
         credentialIssuerMetadataRetriever.getListOfIssuer().stream().forEach((issuer) -> {
-            issuer.credentialConfiguration().keySet().stream().forEach((key) -> {
+            issuer.credentialConfiguration().entrySet().stream().forEach((key) -> {
                 List<Claims> listOfClaims = new ArrayList<>();
                 List<Display> innerListOfDisplay = new ArrayList<>();
                 List<Display> outerListOfDisplay = new ArrayList<>();
-                issuer.credentialConfiguration().get(key).credentialMetadata().display().stream().forEach((display) -> {
+                key.getValue().credentialMetadata().display().stream().forEach((display) -> {
                     Display displayLocal = new Display(display.name(), display.locale());
                     outerListOfDisplay.add(displayLocal);
                 });
-                issuer.credentialConfiguration().get(key).credentialMetadata().claims().stream().forEach((claim) -> {
+                key.getValue().credentialMetadata().claims().stream().forEach((claim) -> {
                     claim.display().stream().forEach((display) -> {
                         Display displayLocal = new Display(display.name(), display.locale());
                         innerListOfDisplay.add(displayLocal);
@@ -41,15 +41,9 @@ public class CredentialRegisterService {
                     Claims claims = new Claims(claim.path(), innerListOfDisplay);
                     listOfClaims.add(claims);
                 });
-                String doctype;
-                if(issuer.credentialConfiguration().get(key).vct()!= null)
-                {
-                    doctype = issuer.credentialConfiguration().get(key).vct();
-                } else {
-                    doctype = issuer.credentialConfiguration().get(key).doctype();
-                }
+                String doctype = documentType(key.getValue().vct());
                 CredentialMetadata credentialMetadata = new CredentialMetadata(outerListOfDisplay, listOfClaims);
-                CredentialsIssuer treatedIssuer = new CredentialsIssuer(issuer.credentialIssuer(), key, doctype, issuer.credentialConfiguration().get(key).format(), credentialMetadata);
+                CredentialsIssuer treatedIssuer = new CredentialsIssuer(issuer.credentialIssuer(), key.getKey(), doctype, key.getValue().format(), credentialMetadata);
                 outputCredentials.add(treatedIssuer);
             });
         });
@@ -57,5 +51,13 @@ public class CredentialRegisterService {
     }
     public Credentials  getCredentials() {
         return credentials;
+    }
+
+    public String documentType(String documentType) {
+        if (documentType != null) {
+            return "vct";
+        } else {
+            return "doctype";
+        }
     }
 }

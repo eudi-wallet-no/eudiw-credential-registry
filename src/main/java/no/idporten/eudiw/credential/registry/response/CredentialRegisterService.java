@@ -41,7 +41,7 @@ public class CredentialRegisterService {
                     Claims claims = new Claims(claim.path(), innerListOfDisplay);
                     listOfClaims.add(claims);
                 });
-                String doctype = documentType(key.getValue().vct());
+                String doctype = documentType(key.getValue().vct(), key.getValue().doctype());
                 CredentialMetadata credentialMetadata = new CredentialMetadata(outerListOfDisplay, listOfClaims);
                 CredentialsIssuer treatedIssuer = new CredentialsIssuer(issuer.credentialIssuer(), key.getKey(), doctype, key.getValue().format(), credentialMetadata);
                 outputCredentials.add(treatedIssuer);
@@ -53,11 +53,12 @@ public class CredentialRegisterService {
         return credentials;
     }
 
-    public String documentType(String documentType) {
-        if (documentType != null) {
-            return "vct";
-        } else {
-            return "doctype";
+    public String documentType(String vct, String doctype) {
+        if (vct != null && vct.equals("vct")) {
+            return vct;
+        } else  if (doctype != null && doctype.equals("doctype")) {
+            return doctype;
         }
+        return null;
     }
 }

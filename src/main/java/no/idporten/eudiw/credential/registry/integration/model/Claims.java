@@ -12,7 +12,7 @@ public record Claims(
         @NotNull
         @JsonProperty("path")
         List<@NotBlank String> path,
-        @NotBlank
+        @NotNull
         @JsonProperty("display")
         List<Display> display
 ) {

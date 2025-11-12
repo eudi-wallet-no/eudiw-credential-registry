@@ -9,6 +9,7 @@ public record Display(
         @NotBlank
         @JsonProperty("name")
         String name,
+        @NotBlank
         @JsonProperty("locale")
         String locale
 ) {

@@ -27,13 +27,13 @@ public class CredentialRegisterService {
         credentialIssuerMetadataRetriever.getListOfIssuer().stream().forEach((issuer) -> {
             issuer.credentialConfiguration().entrySet().stream().forEach((key) -> {
                 List<Claims> listOfClaims = new ArrayList<>();
-                List<Display> innerListOfDisplay = new ArrayList<>();
                 List<Display> outerListOfDisplay = new ArrayList<>();
                 key.getValue().credentialMetadata().display().stream().forEach((display) -> {
                     Display displayLocal = new Display(display.name(), display.locale());
                     outerListOfDisplay.add(displayLocal);
                 });
                 key.getValue().credentialMetadata().claims().stream().forEach((claim) -> {
+                    List<Display> innerListOfDisplay = new ArrayList<>();
                     claim.display().stream().forEach((display) -> {
                         Display displayLocal = new Display(display.name(), display.locale());
                         innerListOfDisplay.add(displayLocal);

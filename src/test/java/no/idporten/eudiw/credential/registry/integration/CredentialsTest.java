@@ -55,7 +55,7 @@ public class CredentialsTest {
 
 
         assertAll(
-                () -> assertEquals("personal_administrative_number", credentials.getCredentials().get(0).getCredentialMetadata().getClaims().get(0).getPath().get(0).toString())
+                () -> assertEquals("personal_administrative_number", credentials.getCredentials().get(0).getCredential_metadata().getClaims().get(0).getPath().get(0).toString())
         );
     }
 }

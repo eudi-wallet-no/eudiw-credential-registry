@@ -20,15 +20,15 @@ public class CredentialsIssuer {
 
     }
 
-    public String getCredentialIssuer() {
+    public String getCredential_issuer() {
         return this.credential_issuer;
     }
 
-    public String getCredetialConfigurationId() {
+    public String getCredential_configuration_id() {
        return this.credential_configuration_id;
     }
 
-    public String getCredentialType() {
+    public String getCredential_type() {
     return this.credential_type;
     }
 
@@ -36,7 +36,7 @@ public class CredentialsIssuer {
         return this.format;
     }
 
-    public CredentialMetadata getCredentialMetadata() {
+    public CredentialMetadata getCredential_metadata() {
         return this.credential_metadata;
     }
 

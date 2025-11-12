@@ -6,6 +6,7 @@ import no.idporten.eudiw.credential.registry.configuration.CredentialRegisterCon
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
 
 import java.net.URI;
@@ -23,16 +24,19 @@ public class CredentialIssuerMetadataRetriever {
     private final CredentialRegisterConfiguration configuration;
     private final Validator validator;
     private List<CredentialIssuer> listOfIssuer;
+    private final RestClient restClient;
+
     @Autowired
-    public CredentialIssuerMetadataRetriever(final ConfigProperties configProperties, final CredentialRegisterConfiguration configuration, Validator validator) {
+    public CredentialIssuerMetadataRetriever(final ConfigProperties configProperties, final CredentialRegisterConfiguration configuration, Validator validator, RestClient restClient) {
         this.configProperties = configProperties;
         this.configuration = configuration;
+        this.restClient = restClient;
         this.validator = validator;
         this.listOfIssuer = setListOfIssuer();
     }
 
     public CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
-        CredentialIssuer credentialIssuer = configuration.restClient().get()
+        CredentialIssuer credentialIssuer = restClient.get()
                 .uri(uri)
                 .retrieve()
                 .body(CredentialIssuer.class);

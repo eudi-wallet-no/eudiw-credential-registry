@@ -1,5 +1,6 @@
 package no.idporten.eudiw.credential.registry.integration;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.validation.*;
 import no.idporten.eudiw.credential.registry.configuration.ConfigProperties;
 import no.idporten.eudiw.credential.registry.configuration.CredentialRegisterConfiguration;
@@ -23,8 +24,9 @@ public class CredentialIssuerMetadataRetriever {
     private final ConfigProperties configProperties;
     private final CredentialRegisterConfiguration configuration;
     private final Validator validator;
-    private List<CredentialIssuer> listOfIssuer;
     private final RestClient restClient;
+
+    private List<CredentialIssuer> listOfIssuer;
 
     @Autowired
     public CredentialIssuerMetadataRetriever(final ConfigProperties configProperties, final CredentialRegisterConfiguration configuration, Validator validator, RestClient restClient) {
@@ -32,10 +34,14 @@ public class CredentialIssuerMetadataRetriever {
         this.configuration = configuration;
         this.restClient = restClient;
         this.validator = validator;
-        this.listOfIssuer = setListOfIssuer();
     }
 
-    public CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
+    @PostConstruct
+    public void initializeListOfIssuer() {
+        updateListOfIssuer();
+    }
+
+    private CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
         CredentialIssuer credentialIssuer = restClient.get()
                 .uri(uri)
                 .retrieve()
@@ -44,17 +50,17 @@ public class CredentialIssuerMetadataRetriever {
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
         }
-            return credentialIssuer;
+        return credentialIssuer;
     }
 
 
-    public List<CredentialIssuer> setListOfIssuer() {
+    private void updateListOfIssuer() {
         List<CredentialIssuer> issuerList = new ArrayList<>();
         for (URI uri : configProperties.credentialIssuerServers()) {
             CredentialIssuer content = fetchCredentialIssuerFromMetadataRequest(uri);
             issuerList.add(content);
         }
-        return  issuerList;
+        this.listOfIssuer = issuerList;
     }
 
     public List<CredentialIssuer> getListOfIssuer() {

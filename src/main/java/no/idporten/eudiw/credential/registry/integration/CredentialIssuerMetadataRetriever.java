@@ -46,8 +46,8 @@ public class CredentialIssuerMetadataRetriever {
 
     public List<CredentialIssuer> setListOfIssuer() {
         List<CredentialIssuer> issuerList = new ArrayList<>();
-        for (String uri : configProperties.credentialIssuerServers()) {
-            CredentialIssuer content = fetchCredentialIssuerFromMetadataRequest(URI.create(uri));
+        for (URI uri : configProperties.credentialIssuerServers()) {
+            CredentialIssuer content = fetchCredentialIssuerFromMetadataRequest(uri);
             issuerList.add(content);
         }
         return  issuerList;

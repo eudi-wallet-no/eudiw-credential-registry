@@ -37,13 +37,10 @@ public class CredentialIssuerMetadataRetriever {
                 .retrieve()
                 .body(CredentialIssuer.class);
         Set<ConstraintViolation<CredentialIssuer>> violations = validator.validate(credentialIssuer);
-        if (violations.isEmpty()) {
-            return credentialIssuer;
-        }
-        else  {
+        if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
         }
-
+            return credentialIssuer;
     }
 
 

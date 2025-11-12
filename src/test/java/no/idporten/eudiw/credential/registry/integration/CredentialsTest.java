@@ -22,7 +22,7 @@ import java.util.List;
 @DisplayName("When reformating the data")
 @SpringBootTest
 @ActiveProfiles
-public class OutputCredentialsTest {
+public class CredentialsTest {
 
     @MockitoSpyBean
     private CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever;
@@ -35,7 +35,7 @@ public class OutputCredentialsTest {
             """;
 
     @Autowired
-    public OutputCredentialsTest(ObjectMapper objectMapper, CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever) {
+    public CredentialsTest(ObjectMapper objectMapper, CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever) {
         this.objectMapper = objectMapper;
         this.credentialIssuerMetadataRetriever = credentialIssuerMetadataRetriever;
 

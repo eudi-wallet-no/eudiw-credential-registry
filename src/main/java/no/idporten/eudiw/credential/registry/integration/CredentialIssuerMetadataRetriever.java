@@ -21,13 +21,13 @@ import java.util.*;
 public class CredentialIssuerMetadataRetriever {
     private final ConfigProperties configProperties;
     private final CredentialRegisterConfiguration configuration;
-    private Validator validator;
+    private final Validator validator;
     private List<CredentialIssuer> listOfIssuer;
     @Autowired
-    public CredentialIssuerMetadataRetriever(final ConfigProperties configProperties, final CredentialRegisterConfiguration configuration) {
+    public CredentialIssuerMetadataRetriever(final ConfigProperties configProperties, final CredentialRegisterConfiguration configuration, Validator validator) {
         this.configProperties = configProperties;
         this.configuration = configuration;
-        this.validator = Validation.buildDefaultValidatorFactory().getValidator();
+        this.validator = validator;
         this.listOfIssuer = setListOfIssuer();
     }
 

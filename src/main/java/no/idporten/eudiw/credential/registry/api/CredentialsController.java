@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CredentialsController {
 
+    private final CredentialRegisterService credentialRegisterService;
+
     @Autowired
-    CredentialRegisterService credentialRegisterService;
+    public CredentialsController(CredentialRegisterService credentialRegisterService) {
+        this.credentialRegisterService = credentialRegisterService;
+    }
 
 
     @GetMapping(value= "/v1/credentials", produces = MediaType.APPLICATION_JSON_VALUE)

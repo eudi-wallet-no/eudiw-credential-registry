@@ -24,4 +24,8 @@ public record CredentialConfiguration(
         ProofTypesSupported proofTypesSupported
 ) {
 
+    public String doctype() {
+        return this.doctype != null ? this.doctype : this.vct;
+    }
+
 }

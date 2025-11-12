@@ -1,8 +1,6 @@
 package no.idporten.eudiw.credential.registry.response.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CredentialsIssuer {

@@ -2,7 +2,6 @@ package no.idporten.eudiw.credential.registry.api;
 
 import no.idporten.eudiw.credential.registry.response.CredentialRegisterService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import no.idporten.eudiw.credential.registry.response.model.Credentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

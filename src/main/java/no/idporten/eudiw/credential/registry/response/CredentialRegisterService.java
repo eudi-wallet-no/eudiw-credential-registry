@@ -19,10 +19,10 @@ public class CredentialRegisterService {
     @Autowired
     public CredentialRegisterService(CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever) {
         this.credentialIssuerMetadataRetriever = credentialIssuerMetadataRetriever;
-        this.credentials = setResponse();
+        setResponse(credentialIssuerMetadataRetriever);
     }
 
-    public Credentials setResponse() {
+    public void setResponse(CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever) {
         List<CredentialsIssuer> outputCredentials = new ArrayList<>();
         credentialIssuerMetadataRetriever.getListOfIssuer().stream().forEach((issuer) -> {
             issuer.credentialConfiguration().keySet().stream().forEach((key) -> {
@@ -53,6 +53,9 @@ public class CredentialRegisterService {
                 outputCredentials.add(treatedIssuer);
             });
         });
-        return new Credentials(outputCredentials);
+        credentials = new Credentials(outputCredentials);
+    }
+    public Credentials  getCredentials() {
+        return credentials;
     }
 }

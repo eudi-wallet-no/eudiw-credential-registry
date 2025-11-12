@@ -5,22 +5,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CredentialMetadata {
+public record CredentialMetadata(
+        List<Display> display,
+        List<Claims> claims
 
-    private List<Display> display;
-    private List<Claims> claims;
-
-    public CredentialMetadata(List<Display> inputDisplay, List<Claims>  inputClaims) {
-        this.display = inputDisplay;
-        this.claims = inputClaims;
-    }
-
-    public List<Display> getDisplay() {
-        return display;
-    }
-    public List<Claims> getClaims() {
-        return claims;
-    }
-
-
+) {
 }

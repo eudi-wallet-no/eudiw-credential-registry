@@ -50,12 +50,12 @@ public class CredentialsTest {
         listOfIssuers.add(credentialIssuer);
         credentialRegisterService = new CredentialRegisterService(credentialIssuerMetadataRetriever);
         when(credentialIssuerMetadataRetriever.getListOfIssuer()).thenReturn(listOfIssuers);
-        Credentials credentials = credentialRegisterService.setResponse();
+        Credentials credentials = credentialRegisterService.getCredentials();
 
 
 
         assertAll(
-                () -> assertEquals("personal_administrative_number", credentials.getCredentials().get(0).getCredential_metadata().getClaims().get(0).getPath().get(0).toString())
+                () -> assertEquals("personal_administrative_number", credentials.credentials().get(0).credentialMetadata().claims().get(0).path().get(0).toString())
         );
     }
 }

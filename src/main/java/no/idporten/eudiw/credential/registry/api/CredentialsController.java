@@ -20,6 +20,6 @@ public class CredentialsController {
 
     @GetMapping(value= "/v1/credentials", produces = MediaType.APPLICATION_JSON_VALUE)
     public Credentials credentials() {
-        return credentialRegisterService.setResponse();
+        return credentialRegisterService.getCredentials();
     }
 }

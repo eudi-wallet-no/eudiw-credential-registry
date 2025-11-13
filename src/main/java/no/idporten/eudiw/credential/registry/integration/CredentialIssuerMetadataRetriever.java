@@ -5,6 +5,8 @@ import jakarta.validation.*;
 import no.idporten.eudiw.credential.registry.configuration.ConfigProperties;
 import no.idporten.eudiw.credential.registry.configuration.CredentialRegisterConfiguration;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -21,6 +23,7 @@ import java.util.*;
 
 @Service
 public class CredentialIssuerMetadataRetriever {
+    private static final Logger log = LoggerFactory.getLogger(CredentialIssuerMetadataRetriever.class);
     private final ConfigProperties configProperties;
     private final CredentialRegisterConfiguration configuration;
     private final Validator validator;
@@ -54,12 +57,7 @@ public class CredentialIssuerMetadataRetriever {
     }
 
     private void updateListOfIssuer() {
-        List<CredentialIssuer> issuerList = new ArrayList<>();
-        for (URI uri : configProperties.credentialIssuerServers()) {
-            CredentialIssuer content = fetchCredentialIssuerFromMetadataRequest(uri);
-            issuerList.add(content);
-        }
-        this.listOfIssuer = issuerList;
+        this.listOfIssuer = configProperties.credentialIssuerServers().stream().map(this::fetchCredentialIssuerFromMetadataRequest).toList();
     }
 
     public List<CredentialIssuer> getListOfIssuer() {

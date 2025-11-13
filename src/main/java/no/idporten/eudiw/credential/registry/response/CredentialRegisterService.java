@@ -24,14 +24,12 @@ public class CredentialRegisterService {
     }
 
     public void setResponse(CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever) {
-        List<CredentialsIssuer> outputCredentials = new ArrayList<>();
-        credentialIssuerMetadataRetriever.getListOfIssuer().stream().forEach((issuer) -> {
-            issuer.credentialConfiguration().entrySet().stream().forEach((key) -> {
-                CredentialsIssuer credentialsIssuer = inputDataToResponseIssuer(issuer.credentialIssuer(), key.getKey(), key.getValue(), key.getValue().credentialMetadata());
-
-                outputCredentials.add(credentialsIssuer);
-            });
-        });
+        List<CredentialsIssuer> outputCredentials =
+        credentialIssuerMetadataRetriever.getListOfIssuer().stream().flatMap((issuer) ->
+            issuer.credentialConfiguration().entrySet().stream().map((key) ->
+                 inputDataToResponseIssuer(issuer.credentialIssuer(), key.getKey(), key.getValue(), key.getValue().credentialMetadata())
+            )
+        ).toList();
         credentials = new Credentials(outputCredentials);
     }
 

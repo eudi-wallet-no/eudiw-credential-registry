@@ -27,5 +27,4 @@ public class CredentialRegisterConfiguration {
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }
-
 }

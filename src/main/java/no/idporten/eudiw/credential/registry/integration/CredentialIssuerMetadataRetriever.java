@@ -53,7 +53,6 @@ public class CredentialIssuerMetadataRetriever {
         return credentialIssuer;
     }
 
-
     private void updateListOfIssuer() {
         List<CredentialIssuer> issuerList = new ArrayList<>();
         for (URI uri : configProperties.credentialIssuerServers()) {

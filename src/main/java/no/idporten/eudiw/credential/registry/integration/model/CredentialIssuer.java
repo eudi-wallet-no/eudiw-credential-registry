@@ -2,6 +2,7 @@ package no.idporten.eudiw.credential.registry.integration.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
@@ -16,7 +17,7 @@ public record CredentialIssuer(
         String credentialIssuer,
         @NotNull
         @JsonProperty("credential_configurations_supported")
-        Map<String, CredentialConfiguration> credentialConfiguration
+        Map<String, @Valid CredentialConfiguration> credentialConfiguration
 ) {
 }
 

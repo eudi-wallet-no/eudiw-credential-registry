@@ -2,6 +2,7 @@ package no.idporten.eudiw.credential.registry.integration.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
@@ -10,9 +11,9 @@ import java.util.List;
 public record CredentialMetadata(
         @NotNull
         @JsonProperty("display")
-        List<Display> display,
+        List<@Valid Display> display,
         @NotNull
         @JsonProperty("claims")
-        List<Claims> claims
+        List<@Valid Claims> claims
 ) {
 }

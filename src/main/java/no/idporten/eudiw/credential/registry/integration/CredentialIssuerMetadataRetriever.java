@@ -8,6 +8,7 @@ import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -56,6 +57,7 @@ public class CredentialIssuerMetadataRetriever {
         return credentialIssuer;
     }
 
+    @Scheduled(fixedRate = 5000)
     private void updateListOfIssuer() {
         this.listOfIssuer = configProperties.credentialIssuerServers().stream().map(this::fetchCredentialIssuerFromMetadataRequest).toList();
     }

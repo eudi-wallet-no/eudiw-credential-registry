@@ -10,6 +10,8 @@ public class OpenAPIConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-        return new OpenAPI().info(new Info().title("Beviskatalog-API").version("1.0").description("API for å hente alle bevisene som eksisterer i sandkasse-miljøet"));
+        return new OpenAPI().info(new Info().title("Beviskatalog-API").version("1.0").description("API for å vise alle " +
+                "bevisene som eksisterer i sandkasse-miljøet. Her får du informasjon som leses av fra " +
+                ".well-known/openid-credential-issuer endepunktet til utstedere som er registrert i sandkassen."));
     }
 }

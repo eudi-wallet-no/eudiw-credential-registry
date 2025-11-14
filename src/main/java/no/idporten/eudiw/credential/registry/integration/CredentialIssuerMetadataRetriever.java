@@ -34,10 +34,10 @@ public class CredentialIssuerMetadataRetriever {
 
     @Autowired
     public CredentialIssuerMetadataRetriever(final ConfigProperties configProperties, final CredentialRegisterConfiguration configuration, Validator validator, RestClient restClient) {
-        this.configProperties = configProperties;
         this.configuration = configuration;
         this.restClient = restClient;
         this.validator = validator;
+        this.configProperties = configProperties;
     }
 
     @PostConstruct
@@ -57,8 +57,9 @@ public class CredentialIssuerMetadataRetriever {
         return credentialIssuer;
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(cron = "${credential-registry.scheduled-reading}")
     private void updateListOfIssuer() {
+        log.info("Updating list of issuer from credential-registry");
         this.listOfIssuer = configProperties.credentialIssuerServers().stream().map(this::fetchCredentialIssuerFromMetadataRequest).toList();
     }
 

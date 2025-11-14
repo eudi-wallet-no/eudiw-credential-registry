@@ -13,6 +13,7 @@ import java.util.List;
 public record ConfigProperties(
         @DefaultValue("5s") Duration readTimeout,
         @DefaultValue("3s") Duration connectTimeout,
+        @DefaultValue("* */5 * * * *") String scheduledReading,
         @NotNull List<URI> credentialIssuerServers
 
 ) {

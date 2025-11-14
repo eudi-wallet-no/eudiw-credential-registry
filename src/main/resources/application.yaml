@@ -31,5 +31,7 @@ management:
 credential-registry:
   read-timeout: 3s
   connect-timeout: 3s
+  scheduled-reading: > 
+    * */5 * * * *
   credential-issuer-servers:
     - https://utsteder.test.eidas2sandkasse.net/.well-known/openid-credential-issuer

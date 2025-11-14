@@ -1,5 +1,8 @@
 package no.idporten.eudiw.credential.registry.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +11,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class IndexController {
+
+    @Operation(
+            summary = "Informasjon om bevisregisteret",
+            description = "Informasjonsside for bevisregisteret.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Informasjon hentes")
+    })
 
     @GetMapping(value = "/", produces = MediaType.TEXT_HTML_VALUE)
     @ResponseBody

@@ -1,6 +1,8 @@
 package no.idporten.eudiw.credential.registry.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import no.idporten.eudiw.credential.registry.response.CredentialRegisterService;
@@ -25,7 +27,9 @@ public class CredentialsController {
             summary = "Hente alle typer bevis som er registrert i sandkassen",
             description = "Hent alle bevisene som finnes på .well-known/openid-credential-issuer endepunktene til registrerte utstedere")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Alle bevis hentes")
+            @ApiResponse(responseCode = "200", description = "Alle bevis hentes"),
+            @ApiResponse(responseCode = "500", description = "Intern feil",
+            content = @Content(examples= @ExampleObject(description = "error response", value = CredentialRegisterServiceAPISwaggerExample.SERVER_ERROR_EXAMPLE)))
     })
 
 

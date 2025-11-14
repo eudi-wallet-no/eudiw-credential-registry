@@ -8,6 +8,7 @@ import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -33,10 +34,10 @@ public class CredentialIssuerMetadataRetriever {
 
     @Autowired
     public CredentialIssuerMetadataRetriever(final ConfigProperties configProperties, final CredentialRegisterConfiguration configuration, Validator validator, RestClient restClient) {
-        this.configProperties = configProperties;
         this.configuration = configuration;
         this.restClient = restClient;
         this.validator = validator;
+        this.configProperties = configProperties;
     }
 
     @PostConstruct
@@ -45,7 +46,6 @@ public class CredentialIssuerMetadataRetriever {
     }
 
     private CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
-        log.info("Fetching credential issuer from metadata request {}", uri);
         CredentialIssuer credentialIssuer = restClient.get()
                 .uri(uri)
                 .retrieve()
@@ -57,7 +57,9 @@ public class CredentialIssuerMetadataRetriever {
         return credentialIssuer;
     }
 
+    @Scheduled(cron = "${credential-registry.scheduled-reading}")
     private void updateListOfIssuer() {
+        log.info("Updating list of issuer from credential-registry");
         this.listOfIssuer = configProperties.credentialIssuerServers().stream().map(this::fetchCredentialIssuerFromMetadataRequest).toList();
     }
 

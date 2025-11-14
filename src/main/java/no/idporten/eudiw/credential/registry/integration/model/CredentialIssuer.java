@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 import java.util.Map;
 
 @Validated
@@ -17,7 +18,10 @@ public record CredentialIssuer(
         String credentialIssuer,
         @NotNull
         @JsonProperty("credential_configurations_supported")
-        Map<String, @Valid CredentialConfiguration> credentialConfiguration
+        Map<String, @Valid CredentialConfiguration> credentialConfiguration,
+        @NotNull
+        @JsonProperty("display")
+        List<@Valid Display> display
 ) {
 }
 

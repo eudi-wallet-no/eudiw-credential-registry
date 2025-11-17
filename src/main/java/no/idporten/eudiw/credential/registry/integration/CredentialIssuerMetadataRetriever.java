@@ -5,8 +5,6 @@ import jakarta.validation.*;
 import no.idporten.eudiw.credential.registry.configuration.ConfigProperties;
 import no.idporten.eudiw.credential.registry.configuration.CredentialRegisterConfiguration;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -24,7 +22,6 @@ import java.util.*;
 
 @Service
 public class CredentialIssuerMetadataRetriever {
-    private static final Logger log = LoggerFactory.getLogger(CredentialIssuerMetadataRetriever.class);
     private final ConfigProperties configProperties;
     private final CredentialRegisterConfiguration configuration;
     private final Validator validator;
@@ -59,7 +56,6 @@ public class CredentialIssuerMetadataRetriever {
 
     @Scheduled(cron = "${credential-registry.scheduled-reading}")
     private void updateListOfIssuer() {
-        log.info("Updating list of issuer from credential-registry");
         this.listOfIssuer = configProperties.credentialIssuerServers().stream().map(this::fetchCredentialIssuerFromMetadataRequest).toList();
     }
 

@@ -22,17 +22,18 @@ public class CredentialRegisterService {
     @Autowired
     public CredentialRegisterService(CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever) {
         this.credentialIssuerMetadataRetriever = credentialIssuerMetadataRetriever;
-        setResponse(credentialIssuerMetadataRetriever);
+        setResponse();
     }
 
     @Scheduled(cron = "${credential-registry.scheduled-reading}")
     public void updateCredentialMetadataRetriever() {
         this.credentialIssuerMetadataRetriever.updateListOfIssuer();
+        setResponse();
     }
 
-    public void setResponse(CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever) {
+    public void setResponse() {
         List<CredentialsIssuer> outputCredentials =
-        credentialIssuerMetadataRetriever.getListOfIssuer().stream().flatMap((issuer) ->
+        this.credentialIssuerMetadataRetriever.getListOfIssuer().stream().flatMap((issuer) ->
             issuer.credentialConfiguration().entrySet().stream().map((key) ->
                  inputDataToResponseIssuer(issuer.credentialIssuer(), key.getKey(), key.getValue(), issuer.display())
             )

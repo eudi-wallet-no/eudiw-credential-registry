@@ -54,7 +54,7 @@ public class CredentialIssuerMetadataRetriever {
         return credentialIssuer;
     }
 
-    @Scheduled(cron = "${credential-registry.scheduled-reading}")
+    //@Scheduled(cron = "${credential-registry.scheduled-reading}")
     public void updateListOfIssuer() {
         this.listOfIssuer = configProperties.credentialIssuerServers().stream().map(this::fetchCredentialIssuerFromMetadataRequest).toList();
     }

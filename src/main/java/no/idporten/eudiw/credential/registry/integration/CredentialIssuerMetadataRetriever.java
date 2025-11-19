@@ -38,7 +38,7 @@ public class CredentialIssuerMetadataRetriever {
     }
 
     @PostConstruct
-    public void initializeListOfIssuer() {
+    public void init() {
         updateListOfIssuer();
     }
 

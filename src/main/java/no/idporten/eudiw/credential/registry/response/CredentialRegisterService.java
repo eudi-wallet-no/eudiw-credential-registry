@@ -1,6 +1,7 @@
 package no.idporten.eudiw.credential.registry.response;
 
 
+import jakarta.annotation.PostConstruct;
 import no.idporten.eudiw.credential.registry.integration.CredentialIssuerMetadataRetriever;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialConfiguration;
 import no.idporten.eudiw.credential.registry.response.model.*;
@@ -22,12 +23,17 @@ public class CredentialRegisterService {
     @Autowired
     public CredentialRegisterService(CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever) {
         this.credentialIssuerMetadataRetriever = credentialIssuerMetadataRetriever;
+    }
+
+    @PostConstruct
+    public void init() {
         setResponse();
     }
 
     @Scheduled(cron = "${credential-registry.scheduled-reading}")
     public void updateCredentialMetadataRetriever() {
         this.credentialIssuerMetadataRetriever.updateListOfIssuer();
+        log.info("Updating credential metadata retriever");
         setResponse();
     }
 

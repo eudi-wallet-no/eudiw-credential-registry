@@ -49,6 +49,7 @@ public class CredentialsTest {
         List<CredentialIssuer> listOfIssuers = new ArrayList<>();
         listOfIssuers.add(credentialIssuer);
         credentialRegisterService = new CredentialRegisterService(credentialIssuerMetadataRetriever);
+        credentialRegisterService.updateCredentialMetadataRetriever();
         when(credentialIssuerMetadataRetriever.getListOfIssuer()).thenReturn(listOfIssuers);
         Credentials credentials = credentialRegisterService.getCredentials();
 

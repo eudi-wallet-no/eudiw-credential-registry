@@ -4,7 +4,10 @@ package no.idporten.eudiw.credential.registry.response;
 import no.idporten.eudiw.credential.registry.integration.CredentialIssuerMetadataRetriever;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialConfiguration;
 import no.idporten.eudiw.credential.registry.response.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,12 +16,18 @@ import java.util.List;
 @Service
 public class CredentialRegisterService {
 
+    private static final Logger log = LoggerFactory.getLogger(CredentialRegisterService.class);
     private final CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever;
     private Credentials credentials;
     @Autowired
     public CredentialRegisterService(CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever) {
         this.credentialIssuerMetadataRetriever = credentialIssuerMetadataRetriever;
         setResponse(credentialIssuerMetadataRetriever);
+    }
+
+    @Scheduled(cron = "${credential-registry.scheduled-reading}")
+    public void updateCredentialMetadataRetriever() {
+        this.credentialIssuerMetadataRetriever.updateListOfIssuer();
     }
 
     public void setResponse(CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever) {

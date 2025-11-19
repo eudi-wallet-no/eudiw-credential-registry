@@ -27,7 +27,7 @@ public class CredentialRegisterService {
 
     @PostConstruct
     public void init() {
-        setResponse();
+        updateCredentialMetadataRetriever();
     }
 
     @Scheduled(cron = "${credential-registry.scheduled-reading}")

@@ -37,10 +37,6 @@ public class CredentialIssuerMetadataRetriever {
         this.configProperties = configProperties;
     }
 
-    @PostConstruct
-    public void init() {
-        updateListOfIssuer();
-    }
 
     private CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
         CredentialIssuer credentialIssuer = restClient.get()

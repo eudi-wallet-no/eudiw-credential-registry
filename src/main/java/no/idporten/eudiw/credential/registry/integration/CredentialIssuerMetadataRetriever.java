@@ -1,18 +1,23 @@
 package no.idporten.eudiw.credential.registry.integration;
 
-import jakarta.annotation.PostConstruct;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.*;
 import no.idporten.eudiw.credential.registry.configuration.ConfigProperties;
 import no.idporten.eudiw.credential.registry.configuration.CredentialRegisterConfiguration;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
+import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuerUrls;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 
 import java.net.URI;
+import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Responsible for sending get-request to well knwon openid credential issuer endpoints of all issuers registered
@@ -22,6 +27,7 @@ import java.util.*;
 
 @Service
 public class CredentialIssuerMetadataRetriever {
+    private static final Logger log = LoggerFactory.getLogger(CredentialIssuerMetadataRetriever.class);
     private final ConfigProperties configProperties;
     private final CredentialRegisterConfiguration configuration;
     private final Validator validator;
@@ -50,13 +56,28 @@ public class CredentialIssuerMetadataRetriever {
         return credentialIssuer;
     }
 
-    //@Scheduled(cron = "${credential-registry.scheduled-reading}")
     public void updateListOfIssuer() {
-        this.listOfIssuer = configProperties.credentialIssuerServers().stream().map(this::fetchCredentialIssuerFromMetadataRequest).toList();
-    }
+        CredentialIssuerUrls uris = restClient.get()
+                .retrieve()
+                .body(CredentialIssuerUrls.class);
+        List<URI> listUOfURI = new ArrayList<>();
+        log.info("DETTE ER OBJEKTET!!"+ uris);
+        for(URL issuer : uris.credentialIssuerUrls()) {
+            if(issuer.toString().endsWith(".well-known/openid-credential-issuer"))
+            {
+                log.info("Updating credential issuer URLs for {}", issuer);
+                listUOfURI.add(URI.create(issuer.toString()));
+            }
+
+        }
+        this.listOfIssuer = listUOfURI.stream().map(this::fetchCredentialIssuerFromMetadataRequest).toList();
+        //this.listOfIssuer = uris.credentialIssuerUrls().stream().map(this::fetchCredentialIssuerFromMetadataRequest).toList();
+           //this.listOfIssuer = configProperties.rpRegisterServiceUrl().stream().map(this::fetchCredentialIssuerFromMetadataRequest).toList();
+        }
+
 
     public List<CredentialIssuer> getListOfIssuer() {
         return listOfIssuer;
     }
-
 }
+

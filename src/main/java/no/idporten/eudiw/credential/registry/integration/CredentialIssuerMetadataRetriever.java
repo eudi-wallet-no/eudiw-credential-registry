@@ -61,18 +61,13 @@ public class CredentialIssuerMetadataRetriever {
                 .retrieve()
                 .body(CredentialIssuerUrls.class);
         List<URI> listUOfURI = new ArrayList<>();
-        log.info("DETTE ER OBJEKTET!!"+ uris);
-        for(URL issuer : uris.credentialIssuerUrls()) {
+        for(URI issuer : uris.credentialIssuerUrls()) {
             if(issuer.toString().endsWith(".well-known/openid-credential-issuer"))
             {
-                log.info("Updating credential issuer URLs for {}", issuer);
                 listUOfURI.add(URI.create(issuer.toString()));
             }
-
         }
         this.listOfIssuer = listUOfURI.stream().map(this::fetchCredentialIssuerFromMetadataRequest).toList();
-        //this.listOfIssuer = uris.credentialIssuerUrls().stream().map(this::fetchCredentialIssuerFromMetadataRequest).toList();
-           //this.listOfIssuer = configProperties.rpRegisterServiceUrl().stream().map(this::fetchCredentialIssuerFromMetadataRequest).toList();
         }
 
 

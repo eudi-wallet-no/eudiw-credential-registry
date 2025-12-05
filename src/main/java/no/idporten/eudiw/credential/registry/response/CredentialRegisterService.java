@@ -55,7 +55,6 @@ public class CredentialRegisterService {
     }
 
     public Credentials  getCredentials() {
-        log.info("creddi creddi credentials!!!! " +credentials.toString());
         return credentials;
     }
 }

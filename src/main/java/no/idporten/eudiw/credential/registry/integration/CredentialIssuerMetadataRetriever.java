@@ -1,6 +1,5 @@
 package no.idporten.eudiw.credential.registry.integration;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.*;
 import no.idporten.eudiw.credential.registry.configuration.ConfigProperties;
 import no.idporten.eudiw.credential.registry.configuration.CredentialRegisterConfiguration;
@@ -9,15 +8,12 @@ import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuerU
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 
 import java.net.URI;
-import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Responsible for sending get-request to well knwon openid credential issuer endpoints of all issuers registered

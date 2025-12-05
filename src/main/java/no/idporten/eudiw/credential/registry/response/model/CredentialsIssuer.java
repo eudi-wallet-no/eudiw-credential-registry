@@ -1,6 +1,5 @@
 package no.idporten.eudiw.credential.registry.response.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;

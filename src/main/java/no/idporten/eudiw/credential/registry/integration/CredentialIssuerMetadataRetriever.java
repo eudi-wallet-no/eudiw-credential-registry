@@ -51,7 +51,9 @@ public class CredentialIssuerMetadataRetriever {
                 .body(CredentialIssuer.class);
         Set<ConstraintViolation<CredentialIssuer>> violations = validator.validate(credentialIssuer);
         if (!violations.isEmpty()) {
-            throw new ConstraintViolationException(violations);
+            log.error(violations.toString());
+            credentialIssuer = null;
+            //throw new ConstraintViolationException(violations);
         }
         return credentialIssuer;
     }
@@ -67,7 +69,7 @@ public class CredentialIssuerMetadataRetriever {
                 listUOfURI.add(URI.create(issuer.toString()));
             }
         }
-        this.listOfIssuer = listUOfURI.stream().map(this::fetchCredentialIssuerFromMetadataRequest).toList();
+        this.listOfIssuer = listUOfURI.stream().map(this::fetchCredentialIssuerFromMetadataRequest).filter(Objects::nonNull).toList();
         }
 
 

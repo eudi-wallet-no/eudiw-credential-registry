@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+
 public record CredentialsIssuer (
-        @JsonProperty("credential_issuer")
+        @JsonProperty(value= "credential_issuer")
         String credentialIssuer,
         @JsonProperty("credential_configuration_id")
         String credentialConfigurationId,

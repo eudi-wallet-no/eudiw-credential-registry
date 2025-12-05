@@ -40,9 +40,9 @@ public class CredentialIssuerMetadataRetrieverTest {
 
           CredentialIssuer credentialIssuer = objectMapper.readValue(METADATA, CredentialIssuer.class);
           assertAll(
-                  () -> assertEquals("https://utsteder.test.eidas2sandkasse.net", credentialIssuer.credentialIssuer()),
-                  () -> assertEquals("Digital kontaktinformasjon", credentialIssuer.credentialConfiguration().get("no.kontaktregisteret.kontaktinformasjon_mso_mdoc").credentialMetadata().display().get(0).name()),
-                  () -> assertEquals("personal_administrative_number", credentialIssuer.credentialConfiguration().get("no.minid.mpid_sd_jwt_vc").credentialMetadata().claims().get(0).path().get(0))
+                  () -> assertEquals("https://utsteder.test.eidas2sandkasse.net", credentialIssuer.getCredentialIssuer()),
+                  () -> assertEquals("Digital kontaktinformasjon", credentialIssuer.getCredentialConfiguration().get("no.kontaktregisteret.kontaktinformasjon_mso_mdoc").getCredentialMetadata().getDisplay().get(0).getName()),
+                  () -> assertEquals("personal_administrative_number", credentialIssuer.getCredentialConfiguration().get("no.minid.mpid_sd_jwt_vc").getCredentialMetadata().getClaims().get(0).path().get(0))
           );
     }
 }

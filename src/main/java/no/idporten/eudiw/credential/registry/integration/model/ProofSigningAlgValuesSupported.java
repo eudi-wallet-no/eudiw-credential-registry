@@ -8,9 +8,18 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record ProofSigningAlgValuesSupported(
-        @NotNull
-        @JsonProperty("proof_signing_alg_values_supported")
-        List<@NotBlank String> proofSigningAlgValuesSupported
-) {
+public class ProofSigningAlgValuesSupported {
+    @JsonProperty("proof_signing_alg_values_supported")
+    List<String> proofSigningAlgValuesSupported;
+    public ProofSigningAlgValuesSupported(List<String> proofSigningAlgValuesSupported) {
+        this.proofSigningAlgValuesSupported = proofSigningAlgValuesSupported;
+    }
+
+    public void setProofSigningAlgValuesSupported(List<String> proofSigningAlgValuesSupported) {
+        this.proofSigningAlgValuesSupported = proofSigningAlgValuesSupported;
+    }
+
+    public List<String> getProofSigningAlgValuesSupported() {
+        return proofSigningAlgValuesSupported;
+    }
 }

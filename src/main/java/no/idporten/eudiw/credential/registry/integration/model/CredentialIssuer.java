@@ -33,7 +33,7 @@ public class CredentialIssuer {
     @JsonProperty("notification_endpoint")
     private String notificationEndpoint = "";
     @JsonProperty("batch_credential_issuance")
-    private Integer batchCredentialIssuance = -1;
+    private BatchCredentialIssuance batchCredentialIssuance = new BatchCredentialIssuance();
     @JsonProperty("display")
     private List<Display> display = new ArrayList<>();
     @JsonProperty("credential_configurations_supported")
@@ -89,11 +89,11 @@ public class CredentialIssuer {
         return this.notificationEndpoint;
     }
 
-    public void setBatchCredentialIssuance(Integer batchCredentialIssuance){
+    public void setBatchCredentialIssuance(BatchCredentialIssuance batchCredentialIssuance){
         this.batchCredentialIssuance = batchCredentialIssuance;
     }
 
-    public Integer getBatchCredentialIssuance(Integer batchCredentialIssuance){
+    public BatchCredentialIssuance getBatchCredentialIssuance(Integer batchCredentialIssuance){
         return this.batchCredentialIssuance;
     }
 

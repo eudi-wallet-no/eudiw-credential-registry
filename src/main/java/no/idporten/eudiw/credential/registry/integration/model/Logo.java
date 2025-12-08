@@ -1,11 +1,13 @@
 package no.idporten.eudiw.credential.registry.integration.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.Valid;
 
 import java.net.URI;
 
 public class Logo{
     @JsonProperty("uri")
+    @Valid
     private URI uri;
     @JsonProperty("alt_text")
     private String altText = "";

@@ -2,14 +2,12 @@ package no.idporten.eudiw.credential.registry.integration.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
 
 import java.net.URI;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Display {
-    @NotBlank
     @JsonProperty("name")
     private String name;
     @JsonProperty("locale")

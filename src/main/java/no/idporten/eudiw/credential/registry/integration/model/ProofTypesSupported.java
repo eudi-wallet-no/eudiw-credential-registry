@@ -7,6 +7,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ProofTypesSupported{
     @JsonProperty("jwt")
     ProofSigningAlgValuesSupported jwt;
+
+    public ProofTypesSupported(){
+
+    }
+
     public ProofTypesSupported(ProofSigningAlgValuesSupported jwt) {
         this.jwt = jwt;
     }

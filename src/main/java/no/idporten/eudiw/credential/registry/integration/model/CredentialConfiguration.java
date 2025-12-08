@@ -27,7 +27,7 @@ public class CredentialConfiguration{
     @JsonProperty("vct") //hva skal man gjøre med dette
     private String vct;
 
-
+    public CredentialConfiguration() {}
 
     public CredentialConfiguration(String format) {
         this.format = format;

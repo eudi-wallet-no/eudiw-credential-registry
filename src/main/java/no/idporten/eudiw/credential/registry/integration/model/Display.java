@@ -19,6 +19,10 @@ public class Display {
     @JsonProperty("description")
     private String description = "";
 
+    public Display() {
+
+    }
+
     public Display(String name) {
         setName(name);
     }

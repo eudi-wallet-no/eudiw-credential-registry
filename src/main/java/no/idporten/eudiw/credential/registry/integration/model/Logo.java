@@ -10,6 +10,10 @@ public class Logo{
     @JsonProperty("alt_text")
     private String altText = "";
 
+    public Logo() {
+
+    }
+
     public Logo(URI uri) {
         setUri(uri);
     }

@@ -6,7 +6,7 @@ import java.util.List;
 
 
 public record CredentialsIssuer (
-        @JsonProperty(value= "credential_issuer")
+        @JsonProperty("credential_issuer")
         String credentialIssuer,
         @JsonProperty("credential_configuration_id")
         String credentialConfigurationId,

@@ -24,6 +24,7 @@ public class CredentialIssuer {
     @JsonProperty("authorization_servers")
     private List<String> authorizationServers = new ArrayList<>();
     @JsonProperty("credential_endpoint")
+    @Valid
     private URL credentialEndpoint;
     @JsonProperty("nonce_endpoint")
     private String nonceEndpoint = "";
@@ -35,9 +36,13 @@ public class CredentialIssuer {
     private Integer batchCredentialIssuance = -1;
     @JsonProperty("display")
     private List<Display> display = new ArrayList<>();
-    @NotNull
     @JsonProperty("credential_configurations_supported")
+    @NotNull
     private Map<String, @Valid CredentialConfiguration> credentialConfiguration;
+
+    public CredentialIssuer(){
+
+    }
 
     public CredentialIssuer(String credentialIssuer, URL credentialEndpoint, Map<String, CredentialConfiguration> credentialConfiguration){
         setCredentialIssuer(credentialIssuer);

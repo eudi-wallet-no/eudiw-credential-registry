@@ -9,6 +9,11 @@ import java.util.List;
 public class ProofSigningAlgValuesSupported {
     @JsonProperty("proof_signing_alg_values_supported")
     List<String> proofSigningAlgValuesSupported;
+
+    public ProofSigningAlgValuesSupported() {
+
+    }
+
     public ProofSigningAlgValuesSupported(List<String> proofSigningAlgValuesSupported) {
         this.proofSigningAlgValuesSupported = proofSigningAlgValuesSupported;
     }

@@ -48,8 +48,7 @@ public class CredentialIssuerMetadataRetriever {
         Set<ConstraintViolation<CredentialIssuer>> violations = validator.validate(credentialIssuer);
         if (!violations.isEmpty()) {
             log.error(violations.toString());
-            credentialIssuer = null;
-            //throw new ConstraintViolationException(violations);
+            return credentialIssuer = null;
         }
         return credentialIssuer;
     }

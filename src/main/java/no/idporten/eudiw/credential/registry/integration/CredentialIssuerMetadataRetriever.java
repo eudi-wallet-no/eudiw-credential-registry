@@ -73,7 +73,7 @@ public class CredentialIssuerMetadataRetriever {
         }catch (HttpClientErrorException e) {
             log.error("Can not get contact with relying party register, or format of contact is unexpected. Error : "
                     + e.getMessage());
-            listOfIssuer = new ArrayList<>();
+            listOfIssuer = null;
             throw new BadRequestException(e.getMessage());
         }
             for (URI issuer : uris.credentialIssuerUrls()) {

@@ -35,16 +35,12 @@ public class CredentialsTest {
         this.mockRetriever = credentialIssuerMetadataRetriever;
     }
 
-    @BeforeEach
-    public void setup() {
-        MockData mockData = new MockData();
-        Mockito.when(mockRetriever.getListOfIssuer()).thenReturn(mockData.getCredentialIssuers());
-    }
-
 
     @DisplayName("When registering credentials")
     @Test
     void whenReformattingTheData() throws IOException {
+        MockData mockData = new MockData();
+        Mockito.when(mockRetriever.getListOfIssuer()).thenReturn(mockData.getCredentialIssuers());
         this.credentialRegisterService = new CredentialRegisterService(mockRetriever);
         credentialRegisterService.setResponse();
         Credentials credentials = credentialRegisterService.getCredentials();

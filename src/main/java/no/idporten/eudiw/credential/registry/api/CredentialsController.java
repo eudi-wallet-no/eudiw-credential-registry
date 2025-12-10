@@ -39,10 +39,9 @@ public class CredentialsController {
     @GetMapping(value= "/v1/credentials", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Credentials> credentials() {
         if (credentialRegisterService.getCredentials() != null) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        } else {
             return ResponseEntity.ok(credentialRegisterService.getCredentials());
+        } else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 }

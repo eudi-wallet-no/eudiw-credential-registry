@@ -69,13 +69,13 @@ public class CredentialIssuerMetadataRetriever {
             uris = restClient.get()
                     .retrieve()
                     .body(CredentialIssuerUrls.class);
-            listUOfURI = new ArrayList<>();
         }catch (HttpClientErrorException e) {
             log.error("Can not get contact with relying party register, or format of contact is unexpected. Error : "
                     + e.getMessage());
             listOfIssuer = null;
             throw new BadRequestException(e.getMessage());
         }
+        listUOfURI = new ArrayList<>();
             for (URI issuer : uris.credentialIssuerUrls()) {
                 if (issuer.toString().endsWith(".well-known/openid-credential-issuer")) {
                     listUOfURI.add(URI.create(issuer.toString()));

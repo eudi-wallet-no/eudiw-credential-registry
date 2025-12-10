@@ -75,7 +75,6 @@ public class CredentialIssuerMetadataRetriever {
                     + e.getMessage());
             listOfIssuer = new ArrayList<>();
             throw new BadRequestException(e.getMessage());
-
         }
             for (URI issuer : uris.credentialIssuerUrls()) {
                 if (issuer.toString().endsWith(".well-known/openid-credential-issuer")) {
@@ -91,11 +90,7 @@ public class CredentialIssuerMetadataRetriever {
 
 
     public List<CredentialIssuer> getListOfIssuer() {
-        if (Objects.isNull(this.listOfIssuer)) {
-            throw new NullPointerException("No issuer found for Well-Known CredentialIssuer");
-        } else {
-            return listOfIssuer;
-        }
+        return listOfIssuer;
     }
 }
 

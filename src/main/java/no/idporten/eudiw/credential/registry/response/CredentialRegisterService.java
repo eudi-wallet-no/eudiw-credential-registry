@@ -38,10 +38,8 @@ public class CredentialRegisterService {
         } catch (Exception ex) {
             log.error(ex.getMessage());
         }
-        log.info("Updating credential metadata retriever");
-        if (Objects.isNull(this.credentialIssuerMetadataRetriever.getListOfIssuer())) {
-            log.error("No issuer found for Well-Known CredentialIssuer");
-        } else {
+        if (!Objects.isNull(this.credentialIssuerMetadataRetriever.getListOfIssuer())) {
+            log.info("Updating credential metadata retriever");
             setResponse();
         }
     }

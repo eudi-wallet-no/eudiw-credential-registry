@@ -5,34 +5,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
 @DisplayName("When collecting metadata")
 @SpringBootTest
-@ActiveProfiles
-public class CredentialIssuerMetadataRetrieverTest {
+@ActiveProfiles("junit")
+public class CredentialIssuerDataTest {
 
-
-    @MockitoSpyBean
-    private CredentialIssuerMetadataRetriever metadataDataGathering;
-
-    @MockitoBean
-    private CredentialIssuerMetadataRetriever mockRetriever;
-
-    private void setup() {
-        MockData mockData = new MockData();
-        Mockito.when(mockRetriever.getListOfIssuer()).thenReturn(mockData.getCredentialIssuers());
-    }
 
     private final ObjectMapper objectMapper;
     public static final String METADATA = """
@@ -40,7 +24,7 @@ public class CredentialIssuerMetadataRetrieverTest {
           """;
 
     @Autowired
-    public CredentialIssuerMetadataRetrieverTest(ObjectMapper objectMapper) {
+    public CredentialIssuerDataTest(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
 
     }

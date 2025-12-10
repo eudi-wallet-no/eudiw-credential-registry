@@ -5,6 +5,7 @@ import no.idporten.eudiw.credential.registry.response.CredentialRegisterService;
 import no.idporten.eudiw.credential.registry.response.model.Credentials;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -19,31 +20,34 @@ import java.io.IOException;
 
 @DisplayName("credentials testing")
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("junit")
 public class CredentialsTest {
     private static final Logger log = LoggerFactory.getLogger(CredentialsTest.class);
 
+    @MockitoBean
     private CredentialRegisterService credentialRegisterService;
     @MockitoBean
-    private CredentialIssuerMetadataRetriever mockRetriever;
+    private DummyMetadataRetriever mockRetriever;
 
 
     @Autowired
-    public CredentialsTest(CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever) {
+    public CredentialsTest(DummyMetadataRetriever credentialIssuerMetadataRetriever) {
         this.mockRetriever = credentialIssuerMetadataRetriever;
+    }
+
+    @BeforeEach
+    public void setup() {
         MockData mockData = new MockData();
         Mockito.when(mockRetriever.getListOfIssuer()).thenReturn(mockData.getCredentialIssuers());
-        this.credentialRegisterService = new CredentialRegisterService(mockRetriever);
-        credentialRegisterService.setResponse();
-
     }
 
 
     @DisplayName("When registering credentials")
     @Test
     void whenReformattingTheData() throws IOException {
+        this.credentialRegisterService = new CredentialRegisterService(mockRetriever);
+        credentialRegisterService.setResponse();
         Credentials credentials = credentialRegisterService.getCredentials();
-        log.info(credentials.toString());
 
         assertAll(
                 () -> assertEquals("mock_utsteder", credentials.credentials().get(0).credentialIssuer()),

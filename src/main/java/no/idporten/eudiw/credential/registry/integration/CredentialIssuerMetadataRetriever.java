@@ -65,6 +65,7 @@ public class CredentialIssuerMetadataRetriever {
     public void updateListOfIssuer() throws BadRequestException {
         CredentialIssuerUrls uris;
         List<URI> listUOfURI;
+        listUOfURI = new ArrayList<>();
         try {
             uris = restClient.get()
                     .retrieve()
@@ -75,7 +76,6 @@ public class CredentialIssuerMetadataRetriever {
             listOfIssuer = null;
             throw new BadRequestException(e.getMessage());
         }
-        listUOfURI = new ArrayList<>();
             for (URI issuer : uris.credentialIssuerUrls()) {
                 if (issuer.toString().endsWith(".well-known/openid-credential-issuer")) {
                     listUOfURI.add(URI.create(issuer.toString()));
@@ -85,9 +85,7 @@ public class CredentialIssuerMetadataRetriever {
             if (listOfIssuer.isEmpty()) {
                 log.info("No issuer found for Well-Known CredentialIssuer");
             }
-
         }
-
 
     public List<CredentialIssuer> getListOfIssuer() {
         return listOfIssuer;

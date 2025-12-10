@@ -5,10 +5,12 @@ import no.idporten.eudiw.credential.registry.configuration.ConfigProperties;
 import no.idporten.eudiw.credential.registry.configuration.CredentialRegisterConfiguration;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuerUrls;
+import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
 
@@ -41,35 +43,59 @@ public class CredentialIssuerMetadataRetriever {
 
 
     private CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
-        CredentialIssuer credentialIssuer = restClient.get()
-                .uri(uri)
-                .retrieve()
-                .body(CredentialIssuer.class);
+        CredentialIssuer credentialIssuer;
+        try {
+            credentialIssuer = restClient.get()
+                    .uri(uri)
+                    .retrieve()
+                    .body(CredentialIssuer.class);
+        } catch (HttpClientErrorException e) {
+            log.error("Error fetching credential issuer from metadata request from issuer: " + uri);
+            return null;
+        }
         Set<ConstraintViolation<CredentialIssuer>> violations = validator.validate(credentialIssuer);
         if (!violations.isEmpty()) {
-            log.error(violations.toString());
+            log.error( "Issuer with uri :" + uri + "has these violations : " + violations.toString() +
+                    " and is therefore not included");
             return null;
         }
         return credentialIssuer;
     }
 
-    public void updateListOfIssuer() {
-        CredentialIssuerUrls uris = restClient.get()
-                .retrieve()
-                .body(CredentialIssuerUrls.class);
-        List<URI> listUOfURI = new ArrayList<>();
-        for(URI issuer : uris.credentialIssuerUrls()) {
-            if(issuer.toString().endsWith(".well-known/openid-credential-issuer"))
-            {
-                listUOfURI.add(URI.create(issuer.toString()));
-            }
+    public void updateListOfIssuer() throws BadRequestException {
+        CredentialIssuerUrls uris;
+        List<URI> listUOfURI;
+        try {
+            uris = restClient.get()
+                    .retrieve()
+                    .body(CredentialIssuerUrls.class);
+            listUOfURI = new ArrayList<>();
+        }catch (HttpClientErrorException e) {
+            log.error("Can not get contact with relying party register, or format of contact is unexpected. Error : "
+                    + e.getMessage());
+            listOfIssuer = new ArrayList<>();
+            throw new BadRequestException(e.getMessage());
+
         }
-        this.listOfIssuer = listUOfURI.stream().map(this::fetchCredentialIssuerFromMetadataRequest).filter(Objects::nonNull).toList();
+            for (URI issuer : uris.credentialIssuerUrls()) {
+                if (issuer.toString().endsWith(".well-known/openid-credential-issuer")) {
+                    listUOfURI.add(URI.create(issuer.toString()));
+                }
+            }
+            this.listOfIssuer = listUOfURI.stream().map(this::fetchCredentialIssuerFromMetadataRequest).filter(Objects::nonNull).toList();
+            if (listOfIssuer.isEmpty()) {
+                log.info("No issuer found for Well-Known CredentialIssuer");
+            }
+
         }
 
 
     public List<CredentialIssuer> getListOfIssuer() {
-        return listOfIssuer;
+        if (Objects.isNull(this.listOfIssuer)) {
+            throw new NullPointerException("No issuer found for Well-Known CredentialIssuer");
+        } else {
+            return listOfIssuer;
+        }
     }
 }
 

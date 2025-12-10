@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -32,9 +33,17 @@ public class CredentialRegisterService {
 
     @Scheduled(cron = "${credential-registry.scheduled-reading}")
     public void updateCredentialMetadataRetriever() {
-        this.credentialIssuerMetadataRetriever.updateListOfIssuer();
+        try {
+            this.credentialIssuerMetadataRetriever.updateListOfIssuer();
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+        }
         log.info("Updating credential metadata retriever");
-        setResponse();
+        if (Objects.isNull(this.credentialIssuerMetadataRetriever.getListOfIssuer())) {
+            log.error("No issuer found for Well-Known CredentialIssuer");
+        } else {
+            setResponse();
+        }
     }
 
     public void setResponse() {

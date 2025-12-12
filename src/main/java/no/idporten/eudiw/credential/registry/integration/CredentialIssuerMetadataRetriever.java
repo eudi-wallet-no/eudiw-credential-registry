@@ -16,6 +16,7 @@ import org.springframework.web.client.RestClient;
 
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Responsible for sending get-request to well knwon openid credential issuer endpoints of all issuers registered
@@ -55,8 +56,7 @@ public class CredentialIssuerMetadataRetriever {
         }
         Set<ConstraintViolation<CredentialIssuer>> violations = validator.validate(credentialIssuer);
         if (!violations.isEmpty()) {
-            log.error( "Issuer with uri :" + uri + "has these violations : " + violations.toString() +
-                    " and is therefore not included");
+            log.error( "Issuer with uri {} has these violations {} and is therefore not included", uri, violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(", ")));
             return null;
         }
         return credentialIssuer;

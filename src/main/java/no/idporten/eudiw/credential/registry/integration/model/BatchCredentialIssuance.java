@@ -1,10 +1,14 @@
 package no.idporten.eudiw.credential.registry.integration.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 public class BatchCredentialIssuance {
 
     @JsonProperty("batch_size")
+    @Min(2)
+    @Max(99)
     private Integer batchSize = -1;
 
     public BatchCredentialIssuance() {
@@ -18,10 +22,6 @@ public class BatchCredentialIssuance {
         return batchSize;
     }
     public void setBatchSize(Integer batchSize) {
-        if (batchSize >=2 && batchSize < 100) {
-            this.batchSize = batchSize;
-        } else {
-            this.batchSize = -1;
-        }
+        this.batchSize = batchSize;
     }
 }

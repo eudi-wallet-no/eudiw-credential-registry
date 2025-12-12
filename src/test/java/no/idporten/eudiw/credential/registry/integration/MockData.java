@@ -15,13 +15,13 @@ import java.util.Map;
 public class MockData {
 
     private static final Logger log = LoggerFactory.getLogger(MockData.class);
-    private List<CredentialIssuer> credentialIssuers;
+    private static List<CredentialIssuer> credentialIssuers;
 
     public MockData() {
         setCredentialsIssuers();
     }
 
-    public void setCredentialsIssuers() {
+    public static void setCredentialsIssuers() {
         credentialIssuers = new ArrayList<>();
         Map<String, CredentialConfiguration> credConfig = new HashMap<>();
         credConfig.put("utsteder", new CredentialConfiguration("sd+jwt-vc"));
@@ -41,7 +41,7 @@ public class MockData {
         }
     }
 
-    public List<CredentialIssuer> getCredentialIssuers() {
+    public static List<CredentialIssuer> getCredentialIssuers() {
         return credentialIssuers;
     }
 }

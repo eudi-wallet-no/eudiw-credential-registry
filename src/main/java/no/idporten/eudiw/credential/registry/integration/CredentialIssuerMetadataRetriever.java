@@ -50,11 +50,8 @@ public class CredentialIssuerMetadataRetriever {
                     .uri(uri)
                     .retrieve()
                     .body(CredentialIssuer.class);
-        } catch (HttpClientErrorException e) {
-            log.error("Error fetching credential issuer from metadata request from issuer: " + uri);
-            return null;
         } catch (Exception e) {
-            log.error("Error fetching credential issuer from metadata request from issuer {} ", uri);
+            log.error("Error fetching credential issuer from metadata request from issuer {} ", uri, e);
             return null;
         }
         Set<ConstraintViolation<CredentialIssuer>> violations = validator.validate(credentialIssuer);

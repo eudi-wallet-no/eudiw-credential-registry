@@ -38,7 +38,7 @@ public class CredentialRegisterService {
         } catch (Exception ex) {
             log.error(ex.getMessage());
         }
-        if (!Objects.isNull(this.credentialIssuerMetadataRetriever.getListOfIssuer())) {
+        if (this.credentialIssuerMetadataRetriever.getListOfIssuer() != null) {
             log.info("Updating credential metadata retriever");
             setResponse();
         }

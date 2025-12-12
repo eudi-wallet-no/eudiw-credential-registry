@@ -77,9 +77,7 @@ public class CredentialIssuerMetadataRetriever {
             throw new BadRequestException(e.getMessage());
         }
             for (URI issuer : uris.credentialIssuerUrls()) {
-                if (issuer.toString().endsWith(".well-known/openid-credential-issuer")) {
-                    listUOfURI.add(URI.create(issuer.toString()));
-                }
+                listUOfURI.add(URI.create(issuer.toString()));
             }
             this.listOfIssuer = listUOfURI.stream().map(this::fetchCredentialIssuerFromMetadataRequest).filter(Objects::nonNull).toList();
             if (listOfIssuer.isEmpty()) {

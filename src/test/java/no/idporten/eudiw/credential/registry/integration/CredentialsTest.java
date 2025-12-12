@@ -16,17 +16,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
-import java.io.IOException;
-
 @DisplayName("credentials testing")
 @SpringBootTest
 @ActiveProfiles("junit")
 public class CredentialsTest {
-    private static final Logger log = LoggerFactory.getLogger(CredentialsTest.class);
 
     @MockitoBean
     private CredentialRegisterService credentialRegisterService;
-    @MockitoBean
+
     private DummyMetadataRetriever mockRetriever;
 
 
@@ -38,9 +35,7 @@ public class CredentialsTest {
 
     @DisplayName("When registering credentials")
     @Test
-    void whenReformattingTheData() throws IOException {
-        MockData mockData = new MockData();
-        Mockito.when(mockRetriever.getListOfIssuer()).thenReturn(mockData.getCredentialIssuers());
+    void whenReformattingTheData() {
         this.credentialRegisterService = new CredentialRegisterService(mockRetriever);
         credentialRegisterService.setResponse();
         Credentials credentials = credentialRegisterService.getCredentials();

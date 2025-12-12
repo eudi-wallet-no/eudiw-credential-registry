@@ -9,7 +9,7 @@ public class BatchCredentialIssuance {
     @JsonProperty("batch_size")
     @Min(2)
     @Max(99)
-    private Integer batchSize = -1;
+    private Integer batchSize = -1; //Litt usikker paa dette
 
     public BatchCredentialIssuance() {
     }

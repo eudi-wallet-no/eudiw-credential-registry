@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Claims{
+public class Claims {
     @NotNull
     @JsonProperty("path")
     private List<@NotBlank String> path;
@@ -21,7 +21,7 @@ public class Claims{
     public Claims() {
 
     }
-    public Claims(List<String> path){
+    public Claims(List<String> path) {
         setPath(path);
     }
 

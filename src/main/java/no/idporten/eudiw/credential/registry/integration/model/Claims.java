@@ -2,6 +2,7 @@ package no.idporten.eudiw.credential.registry.integration.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -16,7 +17,7 @@ public class Claims {
     @JsonProperty("mandatory")
     private boolean mandatory = false;
     @JsonProperty("display")
-    private List<Display> display = new ArrayList<>();
+    private List<@NotNull @Valid Display> display = new ArrayList<>();
 
     public Claims() {
 

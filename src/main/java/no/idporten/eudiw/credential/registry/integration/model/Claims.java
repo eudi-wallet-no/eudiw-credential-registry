@@ -17,7 +17,7 @@ public class Claims {
     @JsonProperty("mandatory")
     private boolean mandatory = false;
     @JsonProperty("display")
-    private List<@NotNull @Valid Display> display = new ArrayList<>();
+    private List<Display> display = new ArrayList<>();
 
     public Claims() {
 

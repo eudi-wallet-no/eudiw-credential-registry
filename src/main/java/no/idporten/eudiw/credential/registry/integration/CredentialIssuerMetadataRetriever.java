@@ -31,6 +31,8 @@ public class CredentialIssuerMetadataRetriever {
     private final CredentialRegisterConfiguration configuration;
     private final Validator validator;
     private final RestClient restClient;
+    private static final String WELLKNOWNENDPOINT = "/.well-known/openid-credential-issuer";
+    private static final String HTTPS = "https://";
 
     private List<CredentialIssuer> listOfIssuer;
 
@@ -45,9 +47,10 @@ public class CredentialIssuerMetadataRetriever {
 
     private CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
         CredentialIssuer credentialIssuer;
+        URI wellknown = formatWellKnwonOpenidCredentialIssuerUri(uri);
         try {
             credentialIssuer = restClient.get()
-                    .uri(uri)
+                    .uri(wellknown)
                     .retrieve()
                     .body(CredentialIssuer.class);
         } catch (Exception e) {
@@ -60,6 +63,14 @@ public class CredentialIssuerMetadataRetriever {
             return null;
         }
         return credentialIssuer;
+    }
+
+    public URI formatWellKnwonOpenidCredentialIssuerUri(URI uri) {
+        if(uri.getPath() != null) {
+            return URI.create(HTTPS + uri.getHost() + WELLKNOWNENDPOINT+ uri.getPath());
+        } else {
+            return URI.create(HTTPS + uri.getHost() + WELLKNOWNENDPOINT);
+        }
     }
 
     public void updateListOfIssuer() throws BadRequestException {

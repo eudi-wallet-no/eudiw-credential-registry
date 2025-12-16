@@ -46,7 +46,7 @@ public class CredentialIssuerMetadataRetriever {
 
     private CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
         CredentialIssuer credentialIssuer;
-        URI wellknown = formatWellKnwonOpenidCredentialIssuerUri(uri);
+        URI wellknown = uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT + uri.getPath());
         try {
             credentialIssuer = restClient.get()
                     .uri(wellknown)
@@ -64,13 +64,6 @@ public class CredentialIssuerMetadataRetriever {
         return credentialIssuer;
     }
 
-    protected URI formatWellKnwonOpenidCredentialIssuerUri(URI uri) {
-        if(uri.getPath() != null) {
-            return uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT + uri.getPath());
-        } else {
-            return uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT);
-        }
-    }
 
     public void updateListOfIssuer() throws BadRequestException {
         CredentialIssuerUrls uris;

@@ -65,11 +65,11 @@ public class CredentialIssuerMetadataRetriever {
         return credentialIssuer;
     }
 
-    public URI formatWellKnwonOpenidCredentialIssuerUri(URI uri) {
+    protected URI formatWellKnwonOpenidCredentialIssuerUri(URI uri) {
         if(uri.getPath() != null) {
-            return URI.create(HTTPS + uri.getHost() + CREDENTIAL_ISSUER_CONFIG_ENDPOINT + uri.getPath());
+            return uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT + uri.getPath());
         } else {
-            return URI.create(HTTPS + uri.getHost() + CREDENTIAL_ISSUER_CONFIG_ENDPOINT);
+            return uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT);
         }
     }
 

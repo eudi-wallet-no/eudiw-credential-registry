@@ -31,7 +31,7 @@ public class CredentialIssuerMetadataRetriever {
     private final CredentialRegisterConfiguration configuration;
     private final Validator validator;
     private final RestClient restClient;
-    private static final String WELLKNOWNENDPOINT = "/.well-known/openid-credential-issuer";
+    private static final String CREDENTIAL_ISSUER_CONFIG_ENDPOINT = "/.well-known/openid-credential-issuer";
     private static final String HTTPS = "https://";
 
     private List<CredentialIssuer> listOfIssuer;
@@ -67,9 +67,9 @@ public class CredentialIssuerMetadataRetriever {
 
     public URI formatWellKnwonOpenidCredentialIssuerUri(URI uri) {
         if(uri.getPath() != null) {
-            return URI.create(HTTPS + uri.getHost() + WELLKNOWNENDPOINT+ uri.getPath());
+            return URI.create(HTTPS + uri.getHost() + CREDENTIAL_ISSUER_CONFIG_ENDPOINT + uri.getPath());
         } else {
-            return URI.create(HTTPS + uri.getHost() + WELLKNOWNENDPOINT);
+            return URI.create(HTTPS + uri.getHost() + CREDENTIAL_ISSUER_CONFIG_ENDPOINT);
         }
     }
 

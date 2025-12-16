@@ -32,7 +32,6 @@ public class CredentialIssuerMetadataRetriever {
     private final Validator validator;
     private final RestClient restClient;
     private static final String CREDENTIAL_ISSUER_CONFIG_ENDPOINT = "/.well-known/openid-credential-issuer";
-    private static final String HTTPS = "https://";
 
     private List<CredentialIssuer> listOfIssuer;
 

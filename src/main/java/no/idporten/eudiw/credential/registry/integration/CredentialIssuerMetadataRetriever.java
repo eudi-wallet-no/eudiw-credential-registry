@@ -9,6 +9,7 @@ import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
@@ -50,6 +51,7 @@ public class CredentialIssuerMetadataRetriever {
         try {
             credentialIssuer = restClient.get()
                     .uri(wellknown)
+                    .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
                     .body(CredentialIssuer.class);
         } catch (Exception e) {

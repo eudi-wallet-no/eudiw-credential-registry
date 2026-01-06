@@ -48,6 +48,10 @@ public class CredentialIssuerMetadataRetriever {
     private CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
         CredentialIssuer credentialIssuer;
         URI wellknown = uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT + uri.getPath());
+        if (!wellknown.getScheme().equals("https")) {
+            log.error("Issuer {} does not use https in its registered uri", uri);
+            return null;
+        }
         try {
             credentialIssuer = restClient.get()
                     .uri(wellknown)

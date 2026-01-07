@@ -105,7 +105,7 @@ public class CredentialIssuerMetadataRetriever {
         this.listOfIssuer = listUOfURI.stream().map(this::fetchCredentialIssuerFromMetadataRequest).filter(Objects::nonNull).toList();
         listOfIssuer.stream().forEach(issuer -> {log.info("issuer {} registered in list of issuers", issuer.getCredentialIssuer());});
         if (listOfIssuer.isEmpty()) {
-            log.info("No issuer found for Well-Known CredentialIssuer");
+            log.info("No issuers found in list of issuers");
         }
     }
 

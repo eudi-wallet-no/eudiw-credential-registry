@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClient;
 
 
@@ -43,11 +44,19 @@ public class CredentialIssuerMetadataRetriever {
         this.configProperties = configProperties;
     }
 
+    public URI buildWellKnown(URI uri) {
+        try {
+            URI wellknown = uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT + uri.getPath());
+            return wellknown;
+        } catch (RuntimeException e) {
+            log.error("error when resolving well known URI {} with error {}", uri, e.getMessage(), e);
+            return null;
+        }
+    }
 
     private CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
         CredentialIssuer credentialIssuer;
-        log.info("Preparing to fetch data from issuer {}", uri);
-        URI wellknown = uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT + uri.getPath());
+        URI wellknown = buildWellKnown(uri);
         log.info("Prepared to fetch data from complete url {}", wellknown);
         try {
             credentialIssuer = restClient.get()
@@ -69,7 +78,7 @@ public class CredentialIssuerMetadataRetriever {
 
 
     public void updateListOfIssuer() throws BadRequestException {
-        CredentialIssuerUrls uris;
+        CredentialIssuerUrls uris = null;
         List<URI> listUOfURI;
         listUOfURI = new ArrayList<>();
         try {
@@ -77,20 +86,28 @@ public class CredentialIssuerMetadataRetriever {
                     .retrieve()
                     .body(CredentialIssuerUrls.class);
         }catch (HttpClientErrorException e) {
-            log.error("Can not get contact with relying party register, or format of contact is unexpected. Error : "
-                    + e.getMessage());
+            log.error("Can not get contact with relying party register, or format of contact is unexpected. Issuer is {} and error is {} ", uris, e.getMessage(), e);
             listOfIssuer = null;
             throw new BadRequestException(e.getMessage());
+        }catch (HttpServerErrorException e) {
+            log.error("Can not get contact with relying party register, or format of contact is unexpected. Error is {} ", e.getMessage(), e);
+            listOfIssuer = null;
         }
-            for (URI issuer : uris.credentialIssuerUrls()) {
-                listUOfURI.add(URI.create(issuer.toString()));
-            }
-            this.listOfIssuer = listUOfURI.stream().map(this::fetchCredentialIssuerFromMetadataRequest).filter(Objects::nonNull).toList();
-            listOfIssuer.stream().forEach(issuer -> {log.info("issuer {} registered in list of issuers", issuer.getCredentialIssuer());});
-            if (listOfIssuer.isEmpty()) {
-                log.info("No issuer found for Well-Known CredentialIssuer");
-            }
+        if (uris == null) {
+            listOfIssuer = null;
+            log.error("Could not read URIs from the relying party register");
+            return;
         }
+        for (URI issuer : uris.credentialIssuerUrls()) {
+            listUOfURI.add(URI.create(issuer.toString()));
+        }
+        this.listOfIssuer = listUOfURI.stream().map(this::fetchCredentialIssuerFromMetadataRequest).filter(Objects::nonNull).toList();
+        listOfIssuer.stream().forEach(issuer -> {log.info("issuer {} registered in list of issuers", issuer.getCredentialIssuer());});
+        if (listOfIssuer.isEmpty()) {
+            log.info("No issuer found for Well-Known CredentialIssuer");
+        }
+    }
+
 
     public List<CredentialIssuer> getListOfIssuer() {
         return listOfIssuer;

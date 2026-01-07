@@ -46,7 +46,9 @@ public class CredentialIssuerMetadataRetriever {
 
     private CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
         CredentialIssuer credentialIssuer;
+        log.info("Preparing to fetch data from issuer {}", uri);
         URI wellknown = uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT + uri.getPath());
+        log.info("Prepared to fetch data from complete url {}", wellknown);
         try {
             credentialIssuer = restClient.get()
                     .uri(wellknown)
@@ -61,6 +63,7 @@ public class CredentialIssuerMetadataRetriever {
             log.error( "Issuer with uri {} has these violations {} and is therefore not included", uri, violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(", ")));
             return null;
         }
+        log.info("Successfully fetched credential issuer from complete url {} and with content {}", uri, credentialIssuer);
         return credentialIssuer;
     }
 
@@ -83,6 +86,7 @@ public class CredentialIssuerMetadataRetriever {
                 listUOfURI.add(URI.create(issuer.toString()));
             }
             this.listOfIssuer = listUOfURI.stream().map(this::fetchCredentialIssuerFromMetadataRequest).filter(Objects::nonNull).toList();
+            listOfIssuer.stream().forEach(issuer -> {log.info("issuer {} registered in list of issuers", issuer.getCredentialIssuer());});
             if (listOfIssuer.isEmpty()) {
                 log.info("No issuer found for Well-Known CredentialIssuer");
             }

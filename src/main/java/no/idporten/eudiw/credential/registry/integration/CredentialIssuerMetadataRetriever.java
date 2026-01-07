@@ -3,12 +3,14 @@ package no.idporten.eudiw.credential.registry.integration;
 import jakarta.validation.*;
 import no.idporten.eudiw.credential.registry.configuration.ConfigProperties;
 import no.idporten.eudiw.credential.registry.configuration.CredentialRegisterConfiguration;
+import no.idporten.eudiw.credential.registry.exception.CredentialRegisterException;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuerUrls;
 import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -49,8 +51,7 @@ public class CredentialIssuerMetadataRetriever {
             URI wellknown = uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT + uri.getPath());
             return wellknown;
         } catch (RuntimeException e) {
-            log.error("error when resolving well known URI {} with error {}", uri, e.getMessage(), e);
-            return null;
+            throw new CredentialRegisterException("error resolving well known URI from issuer "+ uri, e.getMessage(), HttpStatus.BAD_REQUEST, e);
         }
     }
 
@@ -64,13 +65,13 @@ public class CredentialIssuerMetadataRetriever {
                     .retrieve()
                     .body(CredentialIssuer.class);
         } catch (Exception e) {
-            log.error("Error fetching credential issuer from metadata request from issuer {} ", uri, e);
-            return null;
+            throw new CredentialRegisterException("error fetching content from well known- url of issuer" + uri, e.getMessage(), HttpStatus.BAD_REQUEST, e);
         }
         Set<ConstraintViolation<CredentialIssuer>> violations = validator.validate(credentialIssuer);
         if (!violations.isEmpty()) {
-            log.error( "Issuer with uri {} has these violations {} and is therefore not included", uri, violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(", ")));
-            return null;
+            String prettyViolations = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(", "));
+            String errorDescription = String.format("Issuer with uri %s has these violations %s and is therefore not included", uri, prettyViolations);
+            throw new CredentialRegisterException("Constraint violations error", errorDescription, HttpStatus.BAD_REQUEST);
         }
         log.info("Successfully fetched credential issuer from complete url {} and with content {}", uri, credentialIssuer);
         return credentialIssuer;
@@ -86,17 +87,17 @@ public class CredentialIssuerMetadataRetriever {
                     .retrieve()
                     .body(CredentialIssuerUrls.class);
         }catch (HttpClientErrorException e) {
-            log.error("Can not get contact with relying party register, or format of contact is unexpected. Issuer is {} and error is {} ", uris, e.getMessage(), e);
             listOfIssuer = null;
-            throw new BadRequestException(e.getMessage());
+            throw new CredentialRegisterException(e.toString(), e.getMessage(), HttpStatus.BAD_REQUEST);
         }catch (HttpServerErrorException e) {
-            log.error("Can not get contact with relying party register, or format of contact is unexpected. Error is {} ", e.getMessage(), e);
             listOfIssuer = null;
+            throw new CredentialRegisterException(e.toString(), e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
         }
         if (uris == null) {
             listOfIssuer = null;
-            log.error("Could not read URIs from the relying party register");
-            return;
+            throw new CredentialRegisterException("Error when trying to fetch list of uris from relying party service",
+                     "either wrong relying party url, unsupported content on relying party service or other error",
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
         for (URI issuer : uris.credentialIssuerUrls()) {
             listUOfURI.add(URI.create(issuer.toString()));

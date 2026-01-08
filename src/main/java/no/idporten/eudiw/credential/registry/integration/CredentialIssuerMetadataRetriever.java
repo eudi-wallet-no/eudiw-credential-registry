@@ -6,7 +6,6 @@ import no.idporten.eudiw.credential.registry.configuration.CredentialRegisterCon
 import no.idporten.eudiw.credential.registry.exception.CredentialRegisterException;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuerUrls;
-import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +77,7 @@ public class CredentialIssuerMetadataRetriever {
     }
 
 
-    public void updateListOfIssuer() throws BadRequestException {
+    public void updateListOfIssuer(){
         CredentialIssuerUrls uris = null;
         List<URI> listUOfURI;
         listUOfURI = new ArrayList<>();

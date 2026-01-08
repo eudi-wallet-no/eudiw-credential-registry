@@ -47,6 +47,9 @@ public class CredentialIssuerMetadataRetriever {
     }
 
     public URI buildWellKnown(URI uri) {
+        if (uri.getPath().equals("/")){
+            return uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT);
+        }
         try {
             URI wellknown = uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT + uri.getPath());
             return wellknown;

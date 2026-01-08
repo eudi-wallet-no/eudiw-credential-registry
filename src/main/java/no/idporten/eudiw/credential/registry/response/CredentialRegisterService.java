@@ -37,7 +37,7 @@ public class CredentialRegisterService {
         try {
             this.credentialIssuerMetadataRetriever.updateListOfIssuer();
         } catch (Exception ex) {
-            throw new CredentialRegisterException("Error updating credentials", ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new CredentialRegisterException("Error updating credentials", "failed_update_credential_registry", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
         if (this.credentialIssuerMetadataRetriever.getListOfIssuer() != null) {
             log.info("Updating credential metadata retriever");

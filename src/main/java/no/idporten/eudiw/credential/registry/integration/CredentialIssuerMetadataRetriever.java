@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClient;
@@ -64,7 +65,7 @@ public class CredentialIssuerMetadataRetriever {
             log.error("Issuer {} does not use https in its registered uri", uri);
             return null;
         }
-        if (wellknown == null) {
+        if (!StringUtils.hasText(wellknown.getHost())) {
             return null;
         }
         log.info("Prepared to fetch data from complete url {}", wellknown);

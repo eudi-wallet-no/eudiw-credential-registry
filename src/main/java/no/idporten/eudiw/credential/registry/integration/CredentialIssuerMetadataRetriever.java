@@ -64,6 +64,9 @@ public class CredentialIssuerMetadataRetriever {
             log.error("Issuer {} does not use https in its registered uri", uri);
             return null;
         }
+        if (wellknown == null) {
+            return null;
+        }
         log.info("Prepared to fetch data from complete url {}", wellknown);
         try {
             credentialIssuer = restClient.get()

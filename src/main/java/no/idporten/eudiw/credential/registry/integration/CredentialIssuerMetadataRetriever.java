@@ -92,6 +92,7 @@ public class CredentialIssuerMetadataRetriever {
             log.error("Constraint violations error " + errorDescription);
             return null;
         }
+        log.info("Successfully fetched credential issuer from complete url {} ", uri);
         return credentialIssuer;
     }
 

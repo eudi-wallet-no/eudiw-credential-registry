@@ -47,15 +47,14 @@ public class CredentialIssuerMetadataRetriever {
     }
 
     public URI buildWellKnown(URI uri) {
+        if (uri == null) {
+            throw new CredentialRegisterException("Issuer URL is null  "+ uri, "null_issuer_uri", HttpStatus.BAD_REQUEST);
+        }
         if (uri.getPath().equals("/")){
             return uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT);
         }
-        try {
-            URI wellknown = uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT + uri.getPath());
-            return wellknown;
-        } catch (RuntimeException e) {
-            throw new CredentialRegisterException("error resolving well known URI from issuer "+ uri, e.getMessage(), HttpStatus.BAD_REQUEST, e);
-        }
+        URI wellknown = uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT + uri.getPath());
+        return wellknown;
     }
 
     private CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {

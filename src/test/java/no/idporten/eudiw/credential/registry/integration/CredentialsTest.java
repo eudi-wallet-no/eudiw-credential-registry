@@ -49,7 +49,6 @@ public class CredentialsTest {
     @DisplayName("When issuer URL is not https")
     @Test
     void whenIssuerUrlIsNotHttps() {
-        this.credentialRegisterService = new CredentialRegisterService(mockRetriever);
         URI uri = URI.create("http://localhost:8080/");
         CredentialIssuer issuer = mockRetriever.fetchCredentialIssuerFromMetadataRequest(uri);
 
@@ -59,9 +58,24 @@ public class CredentialsTest {
     @DisplayName("When issuer uri is empty")
     @Test
     void whenIssuerUriIsEmpty() {
-        this.credentialRegisterService = new CredentialRegisterService(mockRetriever);
         URI uri = URI.create("");
         CredentialIssuer issuer = mockRetriever.fetchCredentialIssuerFromMetadataRequest(uri);
         assertNull(issuer);
+    }
+
+    @DisplayName("When issuer uri is the way it is supposed to be, it is built correct with well known")
+    @Test
+    void whenIssuerUriIsTheWayItIsSupposedToBe() {
+        URI uri = URI.create("https://utsteder.test.eidas2sandkasse.net");
+        URI result = mockRetriever.buildWellKnown(uri);
+        assertEquals("https://utsteder.test.eidas2sandkasse.net/.well-known/openid-credential-issuer",  result.toString());
+    }
+
+    @DisplayName("When trailing slash case")
+    @Test
+    void whenTrailingSlashCase() {
+        URI uri = URI.create("https://utsteder.test.eidas2sandkasse.net/");
+        URI result = mockRetriever.buildWellKnown(uri);
+        assertEquals("https://utsteder.test.eidas2sandkasse.net/.well-known/openid-credential-issuer", result.toString());
     }
 }

@@ -90,8 +90,8 @@ public class CredentialIssuerMetadataRetriever {
             String prettyViolations = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(", "));
             String errorDescription = String.format("Issuer with uri %s has these violations %s and is therefore not included", uri, prettyViolations);
             log.error("Constraint violations error " + errorDescription);
+            return null;
         }
-        log.info("Successfully fetched credential issuer from complete url {} and with content {}", uri, credentialIssuer);
         return credentialIssuer;
     }
 

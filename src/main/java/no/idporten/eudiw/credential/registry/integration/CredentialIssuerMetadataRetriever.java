@@ -66,7 +66,7 @@ public class CredentialIssuerMetadataRetriever {
             log.error("Issuer {} is null in fetchCredentialIssuerFromMetadataRequest", uri);
             return null;
         }
-        if (!Objects.equals(null, wellknown.getScheme()) && !wellknown.getScheme().equals("https")) {
+        if (wellknown.getScheme()==null || !wellknown.getScheme().equals("https")) {
             log.error("Issuer {} does not use https in its registered uri", uri);
             return null;
         }

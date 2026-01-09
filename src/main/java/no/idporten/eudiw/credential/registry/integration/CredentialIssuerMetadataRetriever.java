@@ -49,7 +49,8 @@ public class CredentialIssuerMetadataRetriever {
 
     public URI buildWellKnown(URI uri) {
         if (uri == null) {
-            throw new CredentialRegisterException("Issuer URL is null  "+ uri, "null_issuer_uri", HttpStatus.BAD_REQUEST);
+            log.error("Issuer URL is null  "+ uri);
+            return null;
         }
         if (uri.getPath().equals("/")){
             return uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT);
@@ -61,11 +62,16 @@ public class CredentialIssuerMetadataRetriever {
     private CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
         CredentialIssuer credentialIssuer;
         URI wellknown = buildWellKnown(uri);
+        if (wellknown == null) {
+            log.error("Issuer {} is null in fetchCredentialIssuerFromMetadataRequest", uri);
+            return null;
+        }
         if (!wellknown.getScheme().equals("https")) {
             log.error("Issuer {} does not use https in its registered uri", uri);
             return null;
         }
         if (!StringUtils.hasText(wellknown.getHost())) {
+            log.error("Issuer {} does not contain characters in host", uri);
             return null;
         }
         log.info("Prepared to fetch data from complete url {}", wellknown);
@@ -76,13 +82,14 @@ public class CredentialIssuerMetadataRetriever {
                     .retrieve()
                     .body(CredentialIssuer.class);
         } catch (Exception e) {
-            throw new CredentialRegisterException("error fetching content from well known- url of issuer" + uri, e.getMessage(), HttpStatus.BAD_REQUEST, e);
+            log.error("error fetching content from well known- url of issuer" + uri, e);
+            return null;
         }
         Set<ConstraintViolation<CredentialIssuer>> violations = validator.validate(credentialIssuer);
         if (!violations.isEmpty()) {
             String prettyViolations = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(", "));
             String errorDescription = String.format("Issuer with uri %s has these violations %s and is therefore not included", uri, prettyViolations);
-            throw new CredentialRegisterException("Constraint violations error", errorDescription, HttpStatus.BAD_REQUEST);
+            log.error("Constraint violations error " + errorDescription);
         }
         log.info("Successfully fetched credential issuer from complete url {} and with content {}", uri, credentialIssuer);
         return credentialIssuer;

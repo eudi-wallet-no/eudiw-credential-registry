@@ -3,28 +3,34 @@ package no.idporten.eudiw.credential.registry.integration.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CredentialConfiguration{
+    @Pattern(regexp = "mso_mdoc|dc\\+sd-jwt|jwt_vc_json|ldp_vc|jwt_vc_json-ld", message = "unrecognized_format")
     @JsonProperty("format")
     @NotBlank
     private String format;
     @JsonProperty("scope")
     private String scope = "";
     @JsonProperty("credential_signing_alg_values_supported")
-    private List<String> credentialSigningAlgValuesSupported = new ArrayList();
+    private List<String> credentialSigningAlgValuesSupported = new ArrayList<>();
     @JsonProperty("cryptographic_binding_methods_supported")
-    private List<String> cryptographicBindingMethodsSupported = new ArrayList();
+    private List<String> cryptographicBindingMethodsSupported = new ArrayList<>();
+    @JsonProperty("credential_definition")
+    private CredentialDefinition credentialDefinition = new CredentialDefinition();
     @JsonProperty("proof_types_supported")
     private ProofTypesSupported proofTypesSupported= new ProofTypesSupported(new ProofSigningAlgValuesSupported(new ArrayList<>()));
     @JsonProperty("credential_metadata")
     private CredentialMetadata credentialMetadata = new CredentialMetadata();
-    @JsonProperty("doctype") //hva skal man gjøre med dette
+    @JsonProperty("doctype")
     private String doctype;
-    @JsonProperty("vct") //hva skal man gjøre med dette
+    @JsonProperty("vct")
     private String vct;
 
     public CredentialConfiguration() {}
@@ -85,4 +91,18 @@ public class CredentialConfiguration{
         return this.credentialMetadata;
     }
 
+    public void setCredentialDefinition(CredentialDefinition credentialDefinition) {
+        if (Objects.equals(format, "jwt_vc_json") && credentialDefinition.getType().getFirst().equals("VerifiableCredential")) {
+            this.credentialDefinition = credentialDefinition;
+        } else if (Objects.equals(format, "ldp_vc") && credentialDefinition.getType().getFirst().equals("VerifiableCredential")
+        && credentialDefinition.getContext().getFirst().equals(URI.create("https://www.w3.org/2018/credentials/v1"))){
+            this.credentialDefinition = credentialDefinition;
+        } else {
+            this.credentialDefinition = new CredentialDefinition();
+        }
+    }
+
+    public CredentialDefinition getCredentialDefinition() {
+        return this.credentialDefinition;
+    }
 }

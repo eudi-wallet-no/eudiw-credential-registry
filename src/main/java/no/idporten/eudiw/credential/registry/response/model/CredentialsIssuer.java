@@ -10,6 +10,8 @@ public record CredentialsIssuer (
         String credentialIssuer,
         @JsonProperty("credential_configuration_id")
         String credentialConfigurationId,
+        @JsonProperty("credential_definition")
+        CredentialDefinition credentialDefinition,
         @JsonProperty("credential_type")
         String credentialType,
         @JsonProperty("format")
@@ -18,6 +20,5 @@ public record CredentialsIssuer (
         CredentialMetadata credentialMetadata,
         @JsonProperty("display")
         List<Display> display
-
 ){
 }

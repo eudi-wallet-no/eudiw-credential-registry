@@ -55,12 +55,11 @@ public class CredentialRegisterService {
     }
 
     private CredentialDefinition vcdmCredentialDefinitionFormat(String format, no.idporten.eudiw.credential.registry.integration.model.CredentialDefinition credentialDefinition) {
-        return switch (format) {
-            case "jwt_vc_json" -> new CredentialDefinition(credentialDefinition.getType(), null);
-            case "ldp_vc", "jwt_vc_json-ld" ->
-                    new CredentialDefinition(credentialDefinition.getType(), credentialDefinition.getContext());
-            default -> null;
-        };
+        if (format.equals("jwt_vc_json")) {
+            return new CredentialDefinition(credentialDefinition.getType(), null);
+        } else {
+            return null;
+        }
     }
 
     private CredentialsIssuer inputDataToResponseIssuer(String issuer, String key, CredentialConfiguration credentialConfiguration, List<no.idporten.eudiw.credential.registry.integration.model.Display> issuerDisplay) {

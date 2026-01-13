@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Pattern;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CredentialConfiguration{
@@ -40,7 +39,7 @@ public class CredentialConfiguration{
         this.format = format;
     }
 
-    public String doctype() {
+    public String findTypeByFormat() {
         if(doctype != null && format.equals("mso_mdoc")){
             return doctype;
         } else if (vct != null && format.equals("dc+sd-jwt")) {

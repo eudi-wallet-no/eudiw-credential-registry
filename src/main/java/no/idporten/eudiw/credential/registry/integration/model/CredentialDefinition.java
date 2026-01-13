@@ -1,49 +1,34 @@
 package no.idporten.eudiw.credential.registry.integration.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class CredentialDefinition {
 
     @JsonProperty("type")
-    private List<String> type;
-    @JsonProperty("@context")
-    private List<URI> context = new ArrayList<>();
+    @Size(min = 2, message = "Expected at least two type values")
+    private List<@NotBlank String> type;
 
     public CredentialDefinition() {
     }
 
+    @JsonIgnore
+    @AssertTrue(message = "First item of credential_definition.type must be \"VerifiableCredential\"")
+    public boolean isValidTypeList() {
+        return Objects.equals(type.getFirst(), "VerifiableCredential");
+    }
+
     public void setType(List<String> type) {
-        if (Objects.equals(type.getFirst(), "VerifiableCredential")
-        && Objects.nonNull(type.get(1))) {
-            this.type = type;
-        } else {
-            this.type = new ArrayList<>();
-        }
+        this.type = type;
     }
 
     public List<String> getType() {
-        return type;
-    }
-
-    public void setContext(List<URI> context) {
-        if (!(context == null)) {
-            if (Objects.equals(context.getFirst(), URI.create("https://www.w3.org/2018/credentials/v1"))
-            && Objects.nonNull(context.get(1))) {
-                this.context = context;
-            } else {
-                this.context = new ArrayList<>();
-            }
-        } else {
-            this.context = new ArrayList<>();
-        }
-    }
-
-    public List<URI> getContext() {
-        return this.context;
+        return this.type;
     }
 }

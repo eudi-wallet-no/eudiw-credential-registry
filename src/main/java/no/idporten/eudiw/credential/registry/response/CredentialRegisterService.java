@@ -54,20 +54,12 @@ public class CredentialRegisterService {
         credentials = new Credentials(outputCredentials);
     }
 
-    private CredentialDefinition vcdmCredentialDefinitionFormat(String format, no.idporten.eudiw.credential.registry.integration.model.CredentialDefinition credentialDefinition) {
-        if (format.equals("jwt_vc_json")) {
-            return new CredentialDefinition(credentialDefinition.getType(), null);
-        } else {
-            return null;
-        }
-    }
-
     private CredentialsIssuer inputDataToResponseIssuer(String issuer, String key, CredentialConfiguration credentialConfiguration, List<no.idporten.eudiw.credential.registry.integration.model.Display> issuerDisplay) {
         List<Display> outerListOfDisplay = credentialConfiguration.getCredentialMetadata().getDisplay().stream().map(display -> new Display(display.getName(), display.getLocale(), display.getDescription())).toList();
         List<Claims> claimsList = credentialConfiguration.getCredentialMetadata().getClaims().stream().map(claims -> new Claims(claims.getPath(), claims.getDisplay().stream().map(display -> new Display(display.getName(), display.getLocale(), display.getDescription())).toList())).toList();
         List<Display> issuerPrettyName = issuerDisplay.stream().map(display -> new Display(display.getName(), display.getLocale(), display.getDescription())).toList();
         CredentialMetadata newCredentialMetadata = new CredentialMetadata(outerListOfDisplay, claimsList);
-        return new CredentialsIssuer(issuer, key, vcdmCredentialDefinitionFormat(credentialConfiguration.getFormat(), credentialConfiguration.getCredentialDefinition()), credentialConfiguration.doctype(), credentialConfiguration.getFormat(), newCredentialMetadata, issuerPrettyName);
+        return new CredentialsIssuer(issuer, key, credentialConfiguration.doctype(), credentialConfiguration.getFormat(), newCredentialMetadata, issuerPrettyName);
     }
 
     public Credentials  getCredentials() {

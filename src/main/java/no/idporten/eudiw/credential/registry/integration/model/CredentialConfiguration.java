@@ -2,19 +2,18 @@ package no.idporten.eudiw.credential.registry.integration.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.ValidationException;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.util.StringUtils;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CredentialConfiguration{
-    @Pattern(regexp = "mso_mdoc|dc\\+sd-jwt|jwt_vc_json|ldp_vc|jwt_vc_json-ld", message = "unrecognized_format")
+    @Pattern(regexp = "mso_mdoc|dc\\+sd-jwt|jwt_vc_json", message = "unrecognized_format")
     @JsonProperty("format")
     @NotBlank
     private String format;
@@ -24,8 +23,9 @@ public class CredentialConfiguration{
     private List<String> credentialSigningAlgValuesSupported = new ArrayList<>();
     @JsonProperty("cryptographic_binding_methods_supported")
     private List<String> cryptographicBindingMethodsSupported = new ArrayList<>();
+    @Valid
     @JsonProperty("credential_definition")
-    private CredentialDefinition credentialDefinition = new CredentialDefinition();
+    private CredentialDefinition credentialDefinition = null;
     @JsonProperty("proof_types_supported")
     private ProofTypesSupported proofTypesSupported= new ProofTypesSupported(new ProofSigningAlgValuesSupported(new ArrayList<>()));
     @JsonProperty("credential_metadata")
@@ -42,7 +42,14 @@ public class CredentialConfiguration{
     }
 
     public String doctype() {
-        return this.doctype != null ? this.doctype : this.vct;
+        if(doctype != null){
+            return doctype;
+        } else if (vct != null) {
+            return vct;
+        } else if (credentialDefinition != null) {
+            return credentialDefinition.getType().get(1);
+        }
+        return null;
     }
 
     public void setScope(String scope){
@@ -94,18 +101,7 @@ public class CredentialConfiguration{
     }
 
     public void setCredentialDefinition(CredentialDefinition credentialDefinition) {
-        if (Objects.equals(format, "jwt_vc_json") && credentialDefinition.getType().getFirst().equals("VerifiableCredential")
-        && StringUtils.hasText(credentialDefinition.getType().get(1))) {
             this.credentialDefinition = credentialDefinition;
-            this.doctype = credentialDefinition.getType().get(1);
-        } else if (Objects.equals(format, "jwt_vc_json") && credentialDefinition.getType().getFirst().equals("VerifiableCredential")
-        || StringUtils.hasText(credentialDefinition.getType().get(1))) {
-            this.credentialDefinition = null;
-        }
-        else
-        {
-            this.credentialDefinition = new CredentialDefinition();
-        }
     }
 
     public CredentialDefinition getCredentialDefinition() {

@@ -2,8 +2,10 @@ package no.idporten.eudiw.credential.registry.integration.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.ValidationException;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import org.springframework.util.StringUtils;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -92,12 +94,16 @@ public class CredentialConfiguration{
     }
 
     public void setCredentialDefinition(CredentialDefinition credentialDefinition) {
-        if (Objects.equals(format, "jwt_vc_json") && credentialDefinition.getType().getFirst().equals("VerifiableCredential")) {
+        if (Objects.equals(format, "jwt_vc_json") && credentialDefinition.getType().getFirst().equals("VerifiableCredential")
+        && StringUtils.hasText(credentialDefinition.getType().get(1))) {
             this.credentialDefinition = credentialDefinition;
-        } else if (Objects.equals(format, "ldp_vc") && credentialDefinition.getType().getFirst().equals("VerifiableCredential")
-        && credentialDefinition.getContext().getFirst().equals(URI.create("https://www.w3.org/2018/credentials/v1"))){
-            this.credentialDefinition = credentialDefinition;
-        } else {
+            this.doctype = credentialDefinition.getType().get(1);
+        } else if (Objects.equals(format, "jwt_vc_json") && credentialDefinition.getType().getFirst().equals("VerifiableCredential")
+        || StringUtils.hasText(credentialDefinition.getType().get(1))) {
+            this.credentialDefinition = null;
+        }
+        else
+        {
             this.credentialDefinition = new CredentialDefinition();
         }
     }

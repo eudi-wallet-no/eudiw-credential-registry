@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +41,11 @@ public class CredentialConfiguration{
     }
 
     public String doctype() {
-        if(doctype != null){
+        if(doctype != null && Objects.equals(format, "mso_mdoc")){
             return doctype;
-        } else if (vct != null) {
+        } else if (vct != null && Objects.equals(format, "dc+sd-jwt")) {
             return vct;
-        } else if (credentialDefinition != null) {
+        } else if (credentialDefinition != null && Objects.equals(format, "jwt_vc_json")) {
             return credentialDefinition.getType().get(1);
         }
         return null;

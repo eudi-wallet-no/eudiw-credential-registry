@@ -41,11 +41,11 @@ public class CredentialConfiguration{
     }
 
     public String doctype() {
-        if(doctype != null && Objects.equals(format, "mso_mdoc")){
+        if(doctype != null && format.equals("mso_mdoc")){
             return doctype;
-        } else if (vct != null && Objects.equals(format, "dc+sd-jwt")) {
+        } else if (vct != null && format.equals("dc+sd-jwt")) {
             return vct;
-        } else if (credentialDefinition != null && Objects.equals(format, "jwt_vc_json")) {
+        } else if (credentialDefinition != null && format.equals("jwt_vc_json")) {
             return credentialDefinition.getType().get(1);
         }
         return null;

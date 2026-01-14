@@ -40,14 +40,12 @@ public class CredentialConfiguration{
     }
 
     public String findTypeByFormat() {
-        if(doctype != null && format.equals("mso_mdoc")){
-            return doctype;
-        } else if (vct != null && format.equals("dc+sd-jwt")) {
-            return vct;
-        } else if (credentialDefinition != null && format.equals("jwt_vc_json")) {
-            return credentialDefinition.getType().get(1);
-        }
-        return null;
+        return switch (this.format) {
+            case "mso_mdoc" -> this.doctype;
+            case "dc+sd-jwt" -> this.vct;
+            case "jwt_vc_json" -> this.credentialDefinition.getType().get(1);
+            default -> null;
+        };
     }
 
     public void setScope(String scope){

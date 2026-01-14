@@ -55,7 +55,7 @@ public class MockData {
         } catch (MalformedURLException e){
             log.info("Feil i skaping av URL i test");
         } catch (ValidationException e){
-            log.error("erra erra");
+            log.error("Valideringsfeil ", e);
         }
     }
 

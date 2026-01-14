@@ -92,14 +92,6 @@ public class CredentialIssuerMetadataRetriever {
             log.error("Constraint violations error " + errorDescription);
             return null;
         }
-        if (credentialIssuer != null) {
-            if (Objects.nonNull(credentialIssuer.getCredentialConfiguration().get("jwt_vc_json"))) {
-                if (Objects.isNull(credentialIssuer.getCredentialConfiguration().get("jwt_vc_json").getCredentialDefinition())){
-                    log.error("issuer {} with jwt_vc_json format did not set credential definition properly. It is removed", uri);
-                    return null;
-                }
-            }
-        }
         log.info("Successfully fetched credential issuer from complete url {} ", uri);
         return credentialIssuer;
     }

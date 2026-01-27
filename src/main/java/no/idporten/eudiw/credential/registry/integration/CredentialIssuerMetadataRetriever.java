@@ -85,9 +85,6 @@ public class CredentialIssuerMetadataRetriever {
 
     protected CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
         CredentialIssuer credentialIssuer;
-        if (!isHttps(uri) || emptyHost(uri)) {
-            return null;
-        }
         URI wellknown = buildWellKnown(uri);
         try {
             credentialIssuer = restClient.get()
@@ -119,7 +116,7 @@ public class CredentialIssuerMetadataRetriever {
 
     public void updateListOfIssuer(){
         CredentialIssuerUrls uris = retrieveCredentialIssuerUrlsFromRPService();
-        if (uris == null) {
+        if (Objects.isNull(uris)) {
             listOfIssuer = null;
             throw new CredentialRegisterException("Error when trying to fetch list of uris from relying party service",
                      "either wrong relying party url, unsupported content on relying party service or other error",

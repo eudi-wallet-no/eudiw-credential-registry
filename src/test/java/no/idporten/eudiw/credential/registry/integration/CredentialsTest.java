@@ -56,6 +56,17 @@ public class CredentialsTest {
         assertNull(issuer);
     }
 
+    @DisplayName("When issuer URL is not https")
+    @Test
+    void whenIssuerUrlIsNotHttps() {
+        URI uri = URI.create("http://localhost:8080/");
+        CredentialIssuer issuer = mockRetriever.fetchCredentialIssuerFromMetadataRequest(uri);
+
+        assertNull(issuer);
+    }
+
+
+
 
 // TODO: se på de siste testene seinere: Må mocke server/url for å få enabla de.
 //    @DisplayName("When issuer URL is not https")

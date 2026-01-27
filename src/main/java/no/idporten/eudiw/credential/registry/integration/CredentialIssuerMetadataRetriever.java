@@ -9,6 +9,7 @@ import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuerU
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -47,11 +48,23 @@ public class CredentialIssuerMetadataRetriever {
         this.configProperties = configProperties;
     }
 
-    public URI buildWellKnown(URI uri) {
-        if (uri == null) {
-            log.error("Issuer URL is null  "+ uri);
-            return null;
+    public boolean isHttps(URI uri){
+        if (uri.getScheme()==null || !uri.getScheme().equals("https")) {
+            log.error("Issuer {} does not use https in its registered uri", uri);
+            return false;
         }
+        return true;
+    }
+
+    public boolean emptyHost(URI uri){
+        if (!StringUtils.hasText(uri.getHost())) {
+            log.error("Issuer {} does not contain characters in host", uri);
+            return true;
+        }
+        return false;
+    }
+
+    public URI buildWellKnown(URI uri) {
         if (uri.getPath().equals("/")){
             return uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT);
         }
@@ -59,22 +72,23 @@ public class CredentialIssuerMetadataRetriever {
         return wellknown;
     }
 
+    public CredentialIssuer validateCredentialIssuer(CredentialIssuer credentialIssuer, URI uri) {
+        Set<ConstraintViolation<CredentialIssuer>> violations = validator.validate(credentialIssuer);
+        if (!violations.isEmpty()) {
+            String prettyViolations = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(", "));
+            String errorDescription = String.format("Issuer with uri %s has these violations %s and is therefore not included", uri, prettyViolations);
+            log.error("Constraint violations error " + errorDescription);
+            return null;
+        }
+        return credentialIssuer;
+    }
+
     protected CredentialIssuer fetchCredentialIssuerFromMetadataRequest(URI uri) {
         CredentialIssuer credentialIssuer;
+        if (!isHttps(uri) || emptyHost(uri)) {
+            return null;
+        }
         URI wellknown = buildWellKnown(uri);
-        if (wellknown == null) {
-            log.error("Issuer {} is null in fetchCredentialIssuerFromMetadataRequest", uri);
-            return null;
-        }
-        if (wellknown.getScheme()==null || !wellknown.getScheme().equals("https")) {
-            log.error("Issuer {} does not use https in its registered uri", uri);
-            return null;
-        }
-        if (!StringUtils.hasText(wellknown.getHost())) {
-            log.error("Issuer {} does not contain characters in host", uri);
-            return null;
-        }
-        log.info("Prepared to fetch data from complete url {}", wellknown);
         try {
             credentialIssuer = restClient.get()
                     .uri(wellknown)
@@ -85,44 +99,43 @@ public class CredentialIssuerMetadataRetriever {
             log.error("error fetching content from well known- url of issuer" + uri, e);
             return null;
         }
-        Set<ConstraintViolation<CredentialIssuer>> violations = validator.validate(credentialIssuer);
-        if (!violations.isEmpty()) {
-            String prettyViolations = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(", "));
-            String errorDescription = String.format("Issuer with uri %s has these violations %s and is therefore not included", uri, prettyViolations);
-            log.error("Constraint violations error " + errorDescription);
-            return null;
-        }
-        log.info("Successfully fetched credential issuer from complete url {} ", uri);
-        return credentialIssuer;
+        return validateCredentialIssuer(credentialIssuer, uri);
     }
 
-
-    public void updateListOfIssuer(){
-        CredentialIssuerUrls uris = null;
-        List<URI> listUOfURI;
-        listUOfURI = new ArrayList<>();
+    public CredentialIssuerUrls retrieveCredentialIssuerUrlsFromRPService() {
+        CredentialIssuerUrls uris;
         try {
             uris = restClient.get()
                     .retrieve()
                     .body(CredentialIssuerUrls.class);
         }catch (HttpClientErrorException e) {
-            listOfIssuer = null;
             throw new CredentialRegisterException(e.toString(), e.getMessage(), HttpStatus.BAD_REQUEST);
         }catch (HttpServerErrorException e) {
-            listOfIssuer = null;
             throw new CredentialRegisterException(e.toString(), e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
         }
+        return uris;
+    }
+
+
+    public void updateListOfIssuer(){
+        CredentialIssuerUrls uris = retrieveCredentialIssuerUrlsFromRPService();
         if (uris == null) {
             listOfIssuer = null;
             throw new CredentialRegisterException("Error when trying to fetch list of uris from relying party service",
                      "either wrong relying party url, unsupported content on relying party service or other error",
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        List<URI> listOfURI = new ArrayList<>();
         for (URI issuer : uris.credentialIssuerUrls()) {
-            listUOfURI.add(URI.create(issuer.toString()));
+            if(issuer != null && isHttps(issuer) && !emptyHost(issuer)) {
+                listOfURI.add(URI.create(issuer.toString()));
+            } else{
+                throw new CredentialRegisterException("Wrong format of URI from RP service.",
+                        " Null, empty or not https URI from RP service",
+                        HttpStatus.BAD_REQUEST);
+            }
         }
-        this.listOfIssuer = listUOfURI.stream().map(this::fetchCredentialIssuerFromMetadataRequest).filter(Objects::nonNull).toList();
-        listOfIssuer.stream().forEach(issuer -> {log.info("issuer {} registered in list of issuers", issuer.getCredentialIssuer());});
+        this.listOfIssuer = listOfURI.stream().map(this::fetchCredentialIssuerFromMetadataRequest).filter(Objects::nonNull).toList();
         if (listOfIssuer.isEmpty()) {
             log.info("No issuers found in list of issuers");
         }

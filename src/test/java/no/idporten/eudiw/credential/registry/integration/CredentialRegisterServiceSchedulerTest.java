@@ -1,0 +1,60 @@
+package no.idporten.eudiw.credential.registry.integration;
+
+import no.idporten.eudiw.credential.registry.response.CredentialRegisterService;
+import no.idporten.eudiw.credential.registry.response.model.Credentials;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
+@SpringBootTest
+@ActiveProfiles("junit")
+@DisplayName("When scheduler is set to work")
+public class CredentialRegisterServiceSchedulerTest {
+
+    DummyMetadataRetriever dummyMetadataRetriever;
+
+    private CredentialRegisterService credentialRegisterService;
+
+    @Autowired
+    public CredentialRegisterServiceSchedulerTest(DummyMetadataRetriever dummyMetadataRetriever) {
+        this.dummyMetadataRetriever = dummyMetadataRetriever;
+        this.credentialRegisterService = new CredentialRegisterService(dummyMetadataRetriever);
+    }
+
+    @Test
+    @DisplayName("When value already exists, and scheduler updates, the new values overwrite the old ones")
+    void schedulerTest(){
+        credentialRegisterService.setResponse();
+        Credentials credentials = credentialRegisterService.getCredentials();
+
+        assertAll(
+                () -> assertEquals("mock_utsteder", credentials.credentials().get(0).credentialIssuer()),
+                () -> assertEquals("sd+jwt-vc", credentials.credentials().get(0).format()),
+                () -> assertEquals("mdoc", credentials.credentials().get(1).format()),
+                () -> assertEquals("jwt_vc_json", credentials.credentials().get(2).format())
+        );
+        credentialRegisterService.updateCredentialMetadataRetriever();
+        dummyMetadataRetriever.updateListOfCredentialIssuers();
+        credentialRegisterService.setResponse();
+        Credentials credentials2 = credentialRegisterService.getCredentials();
+        assertAll(
+                () -> assertEquals("mock_utsteder2", credentials2.credentials().get(0).credentialIssuer()),
+                () -> assertEquals("sd+jwt-vc", credentials2.credentials().get(0).format()),
+                () -> assertEquals("mdoc", credentials2.credentials().get(1).format()),
+                () -> assertEquals("jwt_vc_json", credentials2.credentials().get(2).format())
+        );
+
+
+    }
+
+}

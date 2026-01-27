@@ -35,4 +35,8 @@ public class DummyMetadataRetriever extends CredentialIssuerMetadataRetriever {
     @Override
     public void updateListOfIssuer() {
     }
+
+    protected void updateListOfCredentialIssuers() {
+        mockData.secondSetOfCredentialIssuers();
+    }
 }

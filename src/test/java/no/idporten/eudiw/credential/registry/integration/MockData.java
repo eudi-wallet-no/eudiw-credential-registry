@@ -16,14 +16,14 @@ import java.util.Map;
 public class MockData {
 
     private static final Logger log = LoggerFactory.getLogger(MockData.class);
-    private static List<CredentialIssuer> credentialIssuers;
+    private List<CredentialIssuer> credentialIssuers;
 
     public MockData() {
         setCredentialsIssuers();
     }
 
-    public static void setCredentialsIssuers() {
-        credentialIssuers = new ArrayList<>();
+    public void setCredentialsIssuers() {
+        this.credentialIssuers = new ArrayList<>();
         Map<String, CredentialConfiguration> credConfig = new HashMap<>();
         credConfig.put("utsteder", new CredentialConfiguration("sd+jwt-vc"));
         Map<String, CredentialConfiguration> credConfig2 = new HashMap<>();
@@ -49,9 +49,9 @@ public class MockData {
             CredentialIssuer issuer1 = new CredentialIssuer("mock_utsteder", credential_endpoint1, credConfig);
             CredentialIssuer issuer2 = new CredentialIssuer("mock_utsteder2", credential_endpoint2, credConfig2);
             CredentialIssuer issuer3 = new CredentialIssuer("mock_utsteder3", credential_endpoint3, credConfig3);
-            credentialIssuers.add(issuer1);
-            credentialIssuers.add(issuer2);
-            credentialIssuers.add(issuer3);
+            this.credentialIssuers.add(issuer1);
+            this.credentialIssuers.add(issuer2);
+            this.credentialIssuers.add(issuer3);
         } catch (MalformedURLException e){
             log.info("Feil i skaping av URL i test");
         } catch (ValidationException e){
@@ -59,7 +59,48 @@ public class MockData {
         }
     }
 
-    public static List<CredentialIssuer> getCredentialIssuers() {
-        return credentialIssuers;
+    public void secondSetOfCredentialIssuers() {
+        this.credentialIssuers = new ArrayList<>();
+        Map<String, CredentialConfiguration> credConfig = new HashMap<>();
+        credConfig.put("utsteder2", new CredentialConfiguration("sd+jwt-vc"));
+        Map<String, CredentialConfiguration> credConfig2 = new HashMap<>();
+        credConfig2.put("utstederTest2", new CredentialConfiguration("mdoc"));
+        Map<String, CredentialConfiguration> credConfig3 = new HashMap<>();
+        CredentialConfiguration credentialConfiguration = new CredentialConfiguration("jwt_vc_json");
+        CredentialDefinition definition = new CredentialDefinition();
+        ArrayList<String> types = new ArrayList<>();
+        types.add("VerifiableCredential");
+        types.add("heiskort2");
+        definition.setType(types);
+        credentialConfiguration.setCredentialDefinition(definition);
+        credConfig3.put("testjwtvcjson2", credentialConfiguration);
+
+        URL credential_endpoint1;
+        URL credential_endpoint2;
+        URL credential_endpoint3;
+        try {
+            credential_endpoint1 = new URL("http://eksempel2.com");
+            credential_endpoint2 = new URL("http://eksempel22.com");
+            credential_endpoint3 = new URL("http://eksempel23.com");
+
+            CredentialIssuer issuer1 = new CredentialIssuer("mock_utsteder2", credential_endpoint1, credConfig);
+            CredentialIssuer issuer2 = new CredentialIssuer("mock_utsteder22", credential_endpoint2, credConfig2);
+            CredentialIssuer issuer3 = new CredentialIssuer("mock_utsteder23", credential_endpoint3, credConfig3);
+            this.credentialIssuers.add(issuer1);
+            this.credentialIssuers.add(issuer2);
+            this.credentialIssuers.add(issuer3);
+        } catch (MalformedURLException e){
+            log.info("Feil i skaping av URL i test");
+        } catch (ValidationException e){
+            log.error("Valideringsfeil ", e);
+        }
+    }
+
+
+
+
+
+    public List<CredentialIssuer> getCredentialIssuers() {
+        return this.credentialIssuers;
     }
 }

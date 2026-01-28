@@ -47,7 +47,7 @@ public class CredentialIssuerMetadataRetriever {
         this.configProperties = configProperties;
     }
 
-    public boolean isHttps(URI uri){
+    protected boolean isHttps(URI uri){
         if (uri.getScheme()==null || !uri.getScheme().equals("https")) {
             log.warn("Issuer {} does not use https in its registered uri", uri);
             return false;
@@ -55,7 +55,7 @@ public class CredentialIssuerMetadataRetriever {
         return true;
     }
 
-    public boolean emptyHost(URI uri){
+    protected boolean emptyHost(URI uri){
         if (!StringUtils.hasText(uri.getHost())) {
             log.warn("Issuer {} does not contain characters in host", uri);
             return true;
@@ -63,7 +63,7 @@ public class CredentialIssuerMetadataRetriever {
         return false;
     }
 
-    public URI buildWellKnown(URI uri) {
+    protected URI buildWellKnown(URI uri) {
         if (uri.getPath().equals("/")){
             return uri.resolve(CREDENTIAL_ISSUER_CONFIG_ENDPOINT);
         }
@@ -71,7 +71,7 @@ public class CredentialIssuerMetadataRetriever {
         return wellknown;
     }
 
-    public CredentialIssuer validateCredentialIssuer(CredentialIssuer credentialIssuer, URI uri) {
+    protected CredentialIssuer validateCredentialIssuer(CredentialIssuer credentialIssuer, URI uri) {
         Set<ConstraintViolation<CredentialIssuer>> violations = validator.validate(credentialIssuer);
         if (!violations.isEmpty()) {
             String prettyViolations = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(", "));
@@ -98,7 +98,7 @@ public class CredentialIssuerMetadataRetriever {
         return validateCredentialIssuer(credentialIssuer, uri);
     }
 
-    public CredentialIssuerUrls retrieveCredentialIssuerUrlsFromRPService() {
+    protected CredentialIssuerUrls retrieveCredentialIssuerUrlsFromRPService() {
         CredentialIssuerUrls uris;
         try {
             uris = restClient.get()

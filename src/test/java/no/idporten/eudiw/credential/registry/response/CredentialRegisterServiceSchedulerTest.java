@@ -1,6 +1,7 @@
-package no.idporten.eudiw.credential.registry.integration;
+package no.idporten.eudiw.credential.registry.response;
 
-import no.idporten.eudiw.credential.registry.response.CredentialRegisterService;
+import no.idporten.eudiw.credential.registry.integration.DummyMetadataRetriever;
+import no.idporten.eudiw.credential.registry.integration.MockData;
 import no.idporten.eudiw.credential.registry.response.model.Credentials;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

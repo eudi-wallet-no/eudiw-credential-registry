@@ -125,10 +125,6 @@ public class CredentialIssuerMetadataRetriever {
         for (URI issuer : uris.credentialIssuerUrls()) {
             if(issuer != null && isHttps(issuer) && !emptyHost(issuer)) {
                 listOfURI.add(URI.create(issuer.toString()));
-            } else{
-                throw new CredentialRegisterException("Wrong format of URI from RP service.",
-                        " Null, empty or not https URI from RP service",
-                        HttpStatus.BAD_REQUEST);
             }
         }
         this.listOfIssuer = listOfURI.stream().map(this::fetchCredentialIssuerFromMetadataRequest).filter(Objects::nonNull).toList();

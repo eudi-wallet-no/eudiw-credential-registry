@@ -16,27 +16,21 @@ import java.util.List;
 @Primary
 public class DummyMetadataRetriever extends CredentialIssuerMetadataRetriever {
 
-    private MockData mockData;
 
     public DummyMetadataRetriever(ConfigProperties configProperties,
                                   CredentialRegisterConfiguration configuration,
                                   Validator validator,
                                   RestClient restClient) {
         super(null, null, null, null); // ignored
-        mockData = new MockData();
-        mockData.setCredentialsIssuers();
+
     }
 
     @Override
     public List<CredentialIssuer> getListOfIssuer() {
-        return mockData.getCredentialIssuers();
+        return MockData.mockCredentialIssuersListOne();
     }
 
     @Override
     public void updateListOfIssuer() {
-    }
-
-    protected void updateListOfCredentialIssuers() {
-        mockData.secondSetOfCredentialIssuers();
     }
 }

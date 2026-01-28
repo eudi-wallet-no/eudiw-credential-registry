@@ -4,9 +4,12 @@ import no.idporten.eudiw.credential.registry.response.CredentialRegisterService;
 import no.idporten.eudiw.credential.registry.response.model.Credentials;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("When scheduler is set to work")
 public class CredentialRegisterServiceSchedulerTest {
 
+    @MockitoBean
     DummyMetadataRetriever dummyMetadataRetriever;
 
     private CredentialRegisterService credentialRegisterService;
@@ -30,6 +34,7 @@ public class CredentialRegisterServiceSchedulerTest {
     @Test
     @DisplayName("When value already exists, and scheduler updates, the new values overwrite the old ones")
     void schedulerTest(){
+        Mockito.when(dummyMetadataRetriever.getListOfIssuer()).thenReturn(MockData.mockCredentialIssuersListOne());
         credentialRegisterService.setResponse();
         Credentials credentials = credentialRegisterService.getCredentials();
 
@@ -39,8 +44,8 @@ public class CredentialRegisterServiceSchedulerTest {
                 () -> assertEquals("mdoc", credentials.credentials().get(1).format()),
                 () -> assertEquals("jwt_vc_json", credentials.credentials().get(2).format())
         );
-        credentialRegisterService.updateCredentialMetadataRetriever();
-        dummyMetadataRetriever.updateListOfCredentialIssuers();
+
+        Mockito.when(dummyMetadataRetriever.getListOfIssuer()).thenReturn(MockData.mockCredentialIssuersListTwo());
         credentialRegisterService.setResponse();
         Credentials credentials2 = credentialRegisterService.getCredentials();
         assertAll(
@@ -49,8 +54,5 @@ public class CredentialRegisterServiceSchedulerTest {
                 () -> assertEquals("mdoc", credentials2.credentials().get(1).format()),
                 () -> assertEquals("jwt_vc_json", credentials2.credentials().get(2).format())
         );
-
-
     }
-
 }

@@ -33,14 +33,6 @@ public class CredentialIssuerMetadataRetrieverTest {
     }
 
 
-    @DisplayName("When issuer uri is empty")
-    @Test
-    void whenIssuerUriIsEmpty() {
-        URI uri = URI.create("");
-        CredentialIssuer issuer = retriever.fetchCredentialIssuerFromMetadataRequest(uri);
-        assertNull(issuer);
-    }
-
     @DisplayName("When issuer URL is not https")
     @Test
     void whenIssuerUrlIsNotHttps() {

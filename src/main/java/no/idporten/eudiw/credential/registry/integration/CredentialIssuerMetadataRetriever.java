@@ -49,7 +49,7 @@ public class CredentialIssuerMetadataRetriever {
 
     public boolean isHttps(URI uri){
         if (uri.getScheme()==null || !uri.getScheme().equals("https")) {
-            log.error("Issuer {} does not use https in its registered uri", uri);
+            log.warn("Issuer {} does not use https in its registered uri", uri);
             return false;
         }
         return true;
@@ -57,7 +57,7 @@ public class CredentialIssuerMetadataRetriever {
 
     public boolean emptyHost(URI uri){
         if (!StringUtils.hasText(uri.getHost())) {
-            log.error("Issuer {} does not contain characters in host", uri);
+            log.warn("Issuer {} does not contain characters in host", uri);
             return true;
         }
         return false;
@@ -76,7 +76,7 @@ public class CredentialIssuerMetadataRetriever {
         if (!violations.isEmpty()) {
             String prettyViolations = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(", "));
             String errorDescription = String.format("Issuer with uri %s has these violations %s and is therefore not included", uri, prettyViolations);
-            log.error("Constraint violations error " + errorDescription);
+            log.warn("Constraint violations error " + errorDescription);
             return null;
         }
         return credentialIssuer;
@@ -92,7 +92,7 @@ public class CredentialIssuerMetadataRetriever {
                     .retrieve()
                     .body(CredentialIssuer.class);
         } catch (Exception e) {
-            log.error("error fetching content from well known- url of issuer" + uri, e);
+            log.warn("error fetching content from well known- url of issuer" + uri, e);
             return null;
         }
         return validateCredentialIssuer(credentialIssuer, uri);

@@ -4,6 +4,7 @@ import jakarta.validation.ValidationException;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialConfiguration;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialDefinition;
 import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuer;
+import no.idporten.eudiw.credential.registry.response.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.net.MalformedURLException;
@@ -96,4 +97,103 @@ public class MockData {
         }
         return credentialIssuers;
     }
+
+    public static Credentials mockCredentialsListOne() {
+
+        CredentialsIssuer issuer1 = new CredentialsIssuer(
+                "mock_utsteder",
+                "utsteder",
+                null,
+                "sd+jwt-vc",
+                new CredentialMetadata(
+                        List.of(new Display("Utsteder A", "nb", "Testutsteder A")),
+                        List.of(new Claims(List.of("path", "path2"), List.of(new Display("Utsteder A", "nb", "Testutsteder A"))))
+                ),
+                List.of(
+                        new Display("Mock utsteder", "nb", "En mock av utsteder"),
+                        new Display("Mock issuer", "en", "A mocked issuer")
+                )
+        );
+
+        CredentialsIssuer issuer2 = new CredentialsIssuer(
+                "mock_utsteder2",
+                "utsteder2",
+                null,
+                "sd+jwt-vc",
+                new CredentialMetadata(
+                        List.of(new Display("Utsteder b", "nb", "Testutsteder b")),
+                        List.of(new Claims(List.of("path", "path2"), List.of(new Display("Utsteder b", "nb", "Testutsteder b"))))
+                ),
+                List.of(
+                        new Display("Mock utsteder", "nb", "En mock av utsteder"),
+                        new Display("Mock issuer", "en", "A mocked issuer")
+                )
+        );
+
+        CredentialsIssuer issuer3 = new CredentialsIssuer(
+                "mock_utsteder",
+                "utsteder",
+                null,
+                "sd+jwt-vc",
+                new CredentialMetadata(
+                        List.of(new Display("Utsteder c", "nb", "Testutsteder c")),
+                        List.of(new Claims(List.of("path", "path2"), List.of(new Display("Utsteder c", "nb", "Testutsteder c"))))
+                ),
+                List.of(
+                        new Display("Mock utsteder", "nb", "En mock av utsteder"),
+                        new Display("Mock issuer", "en", "A mocked issuer")
+                )
+        );
+        return new Credentials(List.of(issuer1, issuer2, issuer3));
+    }
+
+    public static Credentials mockCredentialsListTwo() {
+        CredentialsIssuer issuer4 = new CredentialsIssuer(
+                "mock_utsteder4",
+                "utsteder4",
+                null,
+                "sd+jwt-vc",
+                new CredentialMetadata(
+                        List.of(new Display("Utsteder d", "nb", "Testutsteder d")),
+                        List.of(new Claims(List.of("path", "path2"), List.of(new Display("Utsteder A", "nb", "Testutsteder d"))))
+                ),
+                List.of(
+                        new Display("Mock utsteder", "nb", "En mock av utsteder"),
+                        new Display("Mock issuer", "en", "A mocked issuer")
+                )
+        );
+
+        CredentialsIssuer issuer5 = new CredentialsIssuer(
+                "mock_utsteder5",
+                "utsteder5",
+                null,
+                "sd+jwt-vc",
+                new CredentialMetadata(
+                        List.of(new Display("Utsteder b", "nb", "Testutsteder e")),
+                        List.of(new Claims(List.of("path", "path2"), List.of(new Display("Utsteder e", "nb", "Testutsteder e"))))
+                ),
+                List.of(
+                        new Display("Mock utsteder", "nb", "En mock av utsteder"),
+                        new Display("Mock issuer", "en", "A mocked issuer")
+                )
+        );
+
+        CredentialsIssuer issuer6 = new CredentialsIssuer(
+                "mock_utsteder6",
+                "utsteder6",
+                null,
+                "sd+jwt-vc",
+                new CredentialMetadata(
+                        List.of(new Display("Utsteder f", "nb", "Testutsteder f")),
+                        List.of(new Claims(List.of("path", "path2"), List.of(new Display("Utsteder f", "nb", "Testutsteder f"))))
+                ),
+                List.of(
+                        new Display("Mock utsteder", "nb", "En mock av utsteder"),
+                        new Display("Mock issuer", "en", "A mocked issuer")
+                )
+        );
+        return new Credentials(List.of(issuer4, issuer5, issuer6));
+    }
+
+
 }

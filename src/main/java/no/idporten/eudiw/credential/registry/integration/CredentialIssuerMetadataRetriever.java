@@ -116,10 +116,8 @@ public class CredentialIssuerMetadataRetriever {
     public void updateListOfIssuer(){
         CredentialIssuerUrls uris = retrieveCredentialIssuerUrlsFromRPService();
         if (Objects.isNull(uris)) {
-            listOfIssuer = null;
-            throw new CredentialRegisterException("Error when trying to fetch list of uris from relying party service",
-                     "either wrong relying party url, unsupported content on relying party service or other error",
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            listOfIssuer = new ArrayList<>();
+            return;
         }
         List<URI> listOfURI = new ArrayList<>();
         for (URI issuer : uris.credentialIssuerUrls()) {

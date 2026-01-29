@@ -36,7 +36,7 @@ public class CredentialRegisterServiceSchedulerTest {
     @DisplayName("When value already exists, and scheduler updates, the new values overwrite the old ones")
     void schedulerTest(){
         Mockito.when(dummyMetadataRetriever.getListOfIssuer()).thenReturn(MockData.mockCredentialIssuersListOne());
-        credentialRegisterService.setResponse();
+        credentialRegisterService.mapInputToResponse();
         Credentials credentials = credentialRegisterService.getCredentials();
 
         assertAll(
@@ -47,7 +47,7 @@ public class CredentialRegisterServiceSchedulerTest {
         );
 
         Mockito.when(dummyMetadataRetriever.getListOfIssuer()).thenReturn(MockData.mockCredentialIssuersListTwo());
-        credentialRegisterService.setResponse();
+        credentialRegisterService.mapInputToResponse();
         Credentials credentials2 = credentialRegisterService.getCredentials();
         assertAll(
                 () -> assertEquals("mock_utsteder2", credentials2.credentials().get(0).credentialIssuer()),

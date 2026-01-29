@@ -15,7 +15,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 
 @Service
@@ -43,11 +42,11 @@ public class CredentialRegisterService {
         }
         if (this.credentialIssuerMetadataRetriever.getListOfIssuer() != null) {
             log.info("Updating credential metadata retriever");
-            setResponse();
+            mapInputToResponse();
         }
     }
 
-    protected void setResponse() {
+    protected void mapInputToResponse() {
         List<CredentialsIssuer> outputCredentials =
                 this.credentialIssuerMetadataRetriever.getListOfIssuer().stream().flatMap((issuer) ->
                         issuer.getCredentialConfiguration().entrySet().stream().map((key) ->
@@ -81,28 +80,6 @@ public class CredentialRegisterService {
         }
         CredentialMetadata newCredentialMetadata = new CredentialMetadata(credentialMetadataDisplay, issuerMetadataClaims);
         return new CredentialsIssuer(issuer.getCredentialIssuer(), key, credentialConfiguration.findTypeByFormat(), credentialConfiguration.getFormat(), newCredentialMetadata, issuerPrettyName);
-    }
-
-//    protected void setResponse() {
-//        List<CredentialsIssuer> outputCredentials =
-//        this.credentialIssuerMetadataRetriever.getListOfIssuer().stream().flatMap((issuer) ->
-//            issuer.getCredentialConfiguration().entrySet().stream().map((key) ->
-//                 inputDataToResponseIssuer(issuer.getCredentialIssuer(), key.getKey(), key.getValue(), issuer.getDisplay()))
-//            ).toList();
-//        credentials = new Credentials(outputCredentials);
-//    }
-//
-//    private CredentialsIssuer inputDataToResponseIssuer(String issuer, String key, CredentialConfiguration credentialConfiguration, List<no.idporten.eudiw.credential.registry.integration.model.Display> issuerDisplay) {
-//        List<Display> outerListOfDisplay = credentialConfiguration.getCredentialMetadata().getDisplay().stream().map(display -> new Display(display.getName(), display.getLocale(), display.getDescription())).toList();
-//        List<Claims> claimsList = credentialConfiguration.getCredentialMetadata().getClaims().stream().map(claims -> new Claims(claims.getPath(), claims.getDisplay().stream().map(display -> new Display(display.getName(), display.getLocale(), display.getDescription())).toList())).toList();
-//        List<Display> issuerPrettyName = issuerDisplay.stream().map(display -> new Display(display.getName(), display.getLocale(), display.getDescription())).toList();
-//        CredentialMetadata newCredentialMetadata = new CredentialMetadata(outerListOfDisplay, claimsList);
-//        return new CredentialsIssuer(issuer, key, credentialConfiguration.findTypeByFormat(), credentialConfiguration.getFormat(), newCredentialMetadata, issuerPrettyName);
-//    }
-
-    private boolean nullCheck(Object obj) {
-        return Objects.equals(null, obj);
-
     }
 
     public Credentials  getCredentials() {

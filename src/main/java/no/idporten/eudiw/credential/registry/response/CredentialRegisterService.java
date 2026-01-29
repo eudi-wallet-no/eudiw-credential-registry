@@ -56,31 +56,41 @@ public class CredentialRegisterService {
     }
 
     private CredentialsIssuer inputDataToResponseIssuer(CredentialIssuer issuer, String key, CredentialConfiguration credentialConfiguration) {
-        List<Display> issuerPrettyName;
-        List<Display> credentialMetadataDisplay;
-        List<Claims> issuerMetadataClaims;
-        if (credentialConfiguration.getCredentialMetadata() != null && credentialConfiguration.getCredentialMetadata().getDisplay() != null) {
-            credentialMetadataDisplay = credentialConfiguration.getCredentialMetadata().getDisplay().stream().map(display -> new Display(display.getName(), display.getLocale(), display.getDescription())).toList();
-        } else {
-            credentialMetadataDisplay = null;
-        }
-        if(credentialConfiguration.getCredentialMetadata() != null && credentialConfiguration.getCredentialMetadata().getClaims() != null) {
-            if (credentialConfiguration.getCredentialMetadata().getClaims().stream().anyMatch(claims -> claims.getDisplay() != null)){
-                issuerMetadataClaims = credentialConfiguration.getCredentialMetadata().getClaims().stream().map(claims -> new Claims(claims.getPath(), claims.getDisplay().stream().map(display -> new Display(display.getName(), display.getLocale(), display.getDescription())).toList())).toList();
-            } else{
-                issuerMetadataClaims = credentialConfiguration.getCredentialMetadata().getClaims().stream().map(claims -> new Claims(claims.getPath(), null)).toList();
-            }
-        } else {
-            issuerMetadataClaims = null;
-        }
-        if (issuer.getDisplay()!= null){
-            issuerPrettyName = issuer.getDisplay().stream().map(display -> new Display(display.getName(), display.getLocale(), display.getDescription())).toList();
-        } else {
-            issuerPrettyName = null;
-        }
+        List<Display> issuerPrettyName = issuerPrettyDisplay(issuer);
+        List<Display> credentialMetadataDisplay = credentialMetadataDisplay(credentialConfiguration);
+        List<Claims> issuerMetadataClaims = issuerMetadataClaims(credentialConfiguration);
         CredentialMetadata newCredentialMetadata = new CredentialMetadata(credentialMetadataDisplay, issuerMetadataClaims);
         return new CredentialsIssuer(issuer.getCredentialIssuer(), key, credentialConfiguration.findTypeByFormat(), credentialConfiguration.getFormat(), newCredentialMetadata, issuerPrettyName);
     }
+
+    private List<Display> credentialMetadataDisplay(CredentialConfiguration credentialConfiguration) {
+        if (credentialConfiguration.getCredentialMetadata() != null && credentialConfiguration.getCredentialMetadata().getDisplay() != null) {
+            return credentialConfiguration.getCredentialMetadata().getDisplay().stream().map(display -> new Display(display.getName(), display.getLocale(), display.getDescription())).toList();
+        } else {
+            return null;
+        }
+    }
+
+    private List<Claims> issuerMetadataClaims(CredentialConfiguration credentialConfiguration) {
+        if(credentialConfiguration.getCredentialMetadata() != null && credentialConfiguration.getCredentialMetadata().getClaims() != null) {
+            if (credentialConfiguration.getCredentialMetadata().getClaims().stream().anyMatch(claims -> claims.getDisplay() != null)){
+                return credentialConfiguration.getCredentialMetadata().getClaims().stream().map(claims -> new Claims(claims.getPath(), claims.getDisplay().stream().map(display -> new Display(display.getName(), display.getLocale(), display.getDescription())).toList())).toList();
+            } else{
+                return credentialConfiguration.getCredentialMetadata().getClaims().stream().map(claims -> new Claims(claims.getPath(), null)).toList();
+            }
+        } else {
+            return null;
+        }
+    }
+
+    private List<Display> issuerPrettyDisplay(CredentialIssuer issuer) {
+        if (issuer.getDisplay()!= null){
+            return issuer.getDisplay().stream().map(display -> new Display(display.getName(), display.getLocale(), display.getDescription())).toList();
+        } else {
+            return null;
+        }
+    }
+
 
     public Credentials  getCredentials() {
         return credentials;

@@ -56,11 +56,11 @@ public class CredentialRegisterService {
     }
 
     private CredentialsIssuer inputDataToResponseIssuer(CredentialIssuer issuer, String key, CredentialConfiguration credentialConfiguration) {
-        List<Display> issuerPrettyName = issuerPrettyDisplay(issuer);
+        List<Display> issuerPrettyDisplay = issuerPrettyDisplay(issuer);
         List<Display> credentialMetadataDisplay = credentialMetadataDisplay(credentialConfiguration);
         List<Claims> issuerMetadataClaims = issuerMetadataClaims(credentialConfiguration);
         CredentialMetadata newCredentialMetadata = new CredentialMetadata(credentialMetadataDisplay, issuerMetadataClaims);
-        return new CredentialsIssuer(issuer.getCredentialIssuer(), key, credentialConfiguration.findTypeByFormat(), credentialConfiguration.getFormat(), newCredentialMetadata, issuerPrettyName);
+        return new CredentialsIssuer(issuer.getCredentialIssuer(), key, credentialConfiguration.findTypeByFormat(), credentialConfiguration.getFormat(), newCredentialMetadata, issuerPrettyDisplay);
     }
 
     private List<Display> credentialMetadataDisplay(CredentialConfiguration credentialConfiguration) {

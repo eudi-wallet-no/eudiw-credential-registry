@@ -57,9 +57,7 @@ public class CredentialRegisterService {
 
     private CredentialsIssuer inputDataToResponseIssuer(CredentialIssuer issuer, String key, CredentialConfiguration credentialConfiguration) {
         List<Display> issuerPrettyDisplay = issuerPrettyDisplay(issuer);
-        List<Display> credentialMetadataDisplay = credentialMetadataDisplay(credentialConfiguration);
-        List<Claims> issuerMetadataClaims = issuerMetadataClaims(credentialConfiguration);
-        CredentialMetadata newCredentialMetadata = issuerMetadata(credentialConfiguration, credentialMetadataDisplay, issuerMetadataClaims);
+        CredentialMetadata newCredentialMetadata = issuerMetadata(credentialConfiguration);
         return new CredentialsIssuer(issuer.getCredentialIssuer(), key, credentialConfiguration.findTypeByFormat(), credentialConfiguration.getFormat(), newCredentialMetadata, issuerPrettyDisplay);
     }
 
@@ -83,8 +81,10 @@ public class CredentialRegisterService {
         }
     }
 
-    private CredentialMetadata issuerMetadata(CredentialConfiguration credentialConfiguration, List<Display> credentialMetadataDisplay, List<Claims> issuerMetadataClaims) {
+    private CredentialMetadata issuerMetadata(CredentialConfiguration credentialConfiguration) {
         if (credentialConfiguration.getCredentialMetadata() != null) {
+            List<Display> credentialMetadataDisplay = credentialMetadataDisplay(credentialConfiguration);
+            List<Claims> issuerMetadataClaims = issuerMetadataClaims(credentialConfiguration);
             return new CredentialMetadata(credentialMetadataDisplay, issuerMetadataClaims);
         }
         return null;

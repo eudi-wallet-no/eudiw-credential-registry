@@ -25,7 +25,7 @@ public class CredentialRegisterService {
     private final CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever;
 
     // TODO: Credentials should be stored in a cache (external Redis)
-    private Credentials credentials;
+    private volatile Credentials credentials;
 
     @Autowired
     public CredentialRegisterService(CredentialIssuerMetadataRetriever credentialIssuerMetadataRetriever) {

@@ -122,7 +122,7 @@ public class CredentialIssuerMetadataRetriever {
         } catch (ResourceAccessException e) {
             connectInternalApiExceptionCounter.increment();
             throw new CredentialRegisterException(ERROR, "Failed to connect to rp-service", HttpStatus.SERVICE_UNAVAILABLE, e);
-        } catch (HttpServerErrorException e) {
+        } catch (Exception e) {
             throw new CredentialRegisterException(ERROR, "Failed to fetch issuer-server uris from rp-service", HttpStatus.SERVICE_UNAVAILABLE, e);
         }
         return uris;

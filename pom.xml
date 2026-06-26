@@ -39,6 +39,11 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
         <dependency>
+            <groupId>no.idporten.metrics</groupId>
+            <artifactId>idporten-metric-constants-lib</artifactId>
+            <version>1.4.5</version>
+        </dependency>
+        <dependency>
             <groupId>no.idporten.actuator</groupId>
             <artifactId>idporten-actuator-4-starter</artifactId>
             <version>${idporten-actuator-starter.version}</version>

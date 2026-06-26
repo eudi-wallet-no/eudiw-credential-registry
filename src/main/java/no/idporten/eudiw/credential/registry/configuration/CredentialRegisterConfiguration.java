@@ -40,7 +40,6 @@ public class CredentialRegisterConfiguration {
         return RestClient.builder()
                 .requestFactory(clientHttpRequestFactory)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-                .defaultHeader(configProperties.apiKeyHeaderId(), configProperties.apiKeyValue())
                 .build();
     }
 }

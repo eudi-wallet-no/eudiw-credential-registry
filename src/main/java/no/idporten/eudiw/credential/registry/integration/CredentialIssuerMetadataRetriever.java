@@ -9,6 +9,7 @@ import no.idporten.eudiw.credential.registry.integration.model.CredentialIssuerU
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -36,9 +37,13 @@ public class CredentialIssuerMetadataRetriever {
     private static final Logger log = LoggerFactory.getLogger(CredentialIssuerMetadataRetriever.class);
 
     private final Validator validator;
+    @Qualifier("restClientRpService")
     private final RestClient restClientRpService;
+    @Qualifier("restClientExternalApi")
     private final RestClient restClientExternalApi;
+    @Qualifier("connectExternalApiExceptionCounter")
     private final Counter connectExternalApiExceptionCounter;
+    @Qualifier("connectInternalApiExceptionCounter")
     private final Counter connectInternalApiExceptionCounter;
 
     private static final String CREDENTIAL_ISSUER_CONFIG_ENDPOINT = "/.well-known/openid-credential-issuer";

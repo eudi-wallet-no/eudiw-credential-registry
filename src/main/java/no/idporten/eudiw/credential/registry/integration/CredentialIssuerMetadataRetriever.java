@@ -141,7 +141,7 @@ public class CredentialIssuerMetadataRetriever {
         }
         this.listOfIssuer = listOfURI.stream().map(this::fetchCredentialIssuerFromMetadataRequest).filter(Objects::nonNull).toList();
         if (listOfIssuer.isEmpty()) {
-            log.info("No issuers found in list of issuers: {}}", listOfIssuer);
+            log.info("No issuers found in list of issuers: {}", listOfIssuer);
         }
     }
 
